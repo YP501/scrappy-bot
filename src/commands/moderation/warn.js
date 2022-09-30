@@ -54,7 +54,7 @@ async function execute(inter) {
             const warningString = options.getString('warning');
             if (warningString.length > 350) {
                 await inter.editReply('Cancelled command');
-                await inter.followUp({ content: 'Keep your warning under 350 characters! (includes spaces)', ephemeral: true });
+                await inter.followUp({ content: 'Keep your timeout reason under 350 characters! (includes spaces)', ephemeral: true });
                 return;
             };
 
@@ -96,7 +96,7 @@ async function execute(inter) {
             await inter.editReply(`Succesfully removed warning with ID \`${warningId}\``) // TODO: make a sexy embed for this
             return;
 
-        case 'clear':
+        case 'clear': //TODO: Finish button interactions
             const clearButtons = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
@@ -116,30 +116,26 @@ async function execute(inter) {
             const filter = pressedButton => pressedButton.customId === 'clearWarns_yes' || pressedButton.customId === 'clearWarns_no';
             const collector = inter.channel.createMessageComponentCollector({ filter, time: 10000 });
 
-            let interacted = false;
+            // TODO: fix button interaction overlapping. Possible fix: generate id's
             collector.on('collect', async buttonInter => {
                 if (buttonInter.user.id !== user.id) return buttonInter.reply({
                     content: 'Those buttons are not for you!',
                     ephemeral: true
                 });
                 collector.stop();
-                interacted = true;
 
                 switch (buttonInter.customId) {
                     case 'clearWarns_yes':
                         const deletedWarns = await Warn.deleteMany({ target: targetUser.id });
                         if (!deletedWarns.deletedCount) return inter.editReply({ content: 'No warnings were found for this user', components: [] });
-                        inter.editReply({ content: `Succesfully removed ${deletedWarns.deletedCount} warnings for ${targetUser.tag}`, components: [] });
-
+                        return inter.editReply({ content: `Succesfully removed ${deletedWarns.deletedCount} warnings for ${targetUser.tag}`, components: [] })
 
                     case 'clearWarns_no':
-                        return inter.editReply({ content: 'Cancelled command', components: [] });
+                        inter.editReply({ content: 'Cancelled command', components: [] });
                 }
             });
 
-            collector.on('end', (collected) => {
-                if (!interacted && !collected.some(item => item.user.id === user.id)) inter.editReply({ content: 'Interaction ran out of time', components: [] });
-            });
+            collector.on('end') // TODO: Finish this collector
     };
 };
 
