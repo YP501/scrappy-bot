@@ -1,0 +1,13 @@
+const { Client, Collection } = require('discord.js');
+const { readdirSync } = require('fs');
+const { intents } = require('./config.json');
+require('dotenv').config();
+
+const client = new Client({ intents });
+client.commands = new Collection();
+client.buttons = new Collection();
+
+// Call handler files
+readdirSync('./src/structures/handlers').forEach(file => require(`./structures/handlers/${file}`).execute(client));
+
+client.login(process.env.tokenDev);

@@ -1,0 +1,34 @@
+{
+    "intents": [
+        "Guilds",
+        "GuildMessages",
+        "GuildMembers",
+        "MessageContent"
+    ],
+    "version": "v4.0",
+    "guildId": "928369763552464997",
+    "channels": {
+        "error": "933770206008991805",
+        "filterReview": "1002548216941785118",
+        "log": {
+            "timeout": "1011022661926785125",
+            "warn": "1012018634291433582"
+        }
+    },
+    "cmdCooldown": 2000,
+    "xpSettings": {
+        "xpMultiplier": 1000,
+        "minXp": 15,
+        "maxXp": 30,
+        "chatCooldown": 30000
+    },
+    "subReddits": [
+        "ComedyCemetery",
+        "memes",
+        "CrappyDesign",
+        "ihadastroke",
+        "bingbongtheorem",
+        "gocommitdie",
+        "robloxmemes"
+    ]
+}
