@@ -16,4 +16,4 @@ dbAuthDev = "your mongo authentication uri here"
 - You are allowed to self-host this bot but you are not allowed to impersonate this bot as Frankie's bot.
 - If you decide to self-host, keep in mind it only works in **one** server.
 - You **MUST** credit the original author of this repository when self-hosting and **CANNOT** claim it as your own.
-- This bot was previously named Helikopter Bot and was renamed to Scrappy Bot
+- This bot was previously named Helikopter Bot and was renamed to Scrappy Bot.
