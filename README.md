@@ -1,4 +1,5 @@
-# Welcome to frankie-bot!
+# Welcome to scrappy-bot!
+(previously known as HelikopterBot)
 
 **Steps on self-hosting:**
 - Clone the repository with `git clone https://github.com/YP501/frankie-bot.git`
