@@ -6,7 +6,7 @@
 - Add a .env file in the root folder with the following values:
 ```
 tokenDev = "your bot token here"
-dbAuthDev = "your mongo authentication url here"
+dbAuthDev = "your mongo authentication uri here"
 ```
 - Tweak the values in [config.json](https://github.com/YP501/frankie-bot/blob/main/src/config.json) to match the id's of your server
 - Run `node main.js`
