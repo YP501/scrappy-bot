@@ -4,9 +4,7 @@
 - Clone the repository with `git clone https://github.com/YP501/frankie-bot.git`
 - Install the node modules with `yarn install`
 - Add a .env file in the root folder with the following values:
-- 
 `tokenDev = "your bot token here"`
-
 `dbAuthDev = "your mongo authentication url here"`
 - Tweak the values in [config.json](https://github.com/YP501/frankie-bot/blob/main/src/config.json) to match the id's of your server
 - Run `node main.js`
