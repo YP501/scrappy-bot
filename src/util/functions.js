@@ -32,9 +32,13 @@ function formatBlacklist(regexResult, n) {
     return firstChars + highlighed + lastChars;
 };
 
-function generateId(length) {
+function generateId(length, mixed = false) {
     let result = '';
-    let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let chars = '0123456789';
+    const mixedChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    if (mixed === true) chars = mixedChars;
+
     for (var i = 0; i < length; i++) {
         result += chars[Math.floor(Math.random() * chars.length)];
     }

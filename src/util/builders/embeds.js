@@ -89,14 +89,14 @@ const moderation = {
         }
     },
     warn: {
-        responseAdd(targetUser, warningString) {
+        responseAdd(targetUser, savedWarn) {
             return new EmbedBuilder()
                 .setAuthor({
                     name: `Succesfully warned ${targetUser.tag}`,
                     iconURL: targetUser.displayAvatarURL()
                 })
-                .addFields({ name: 'Warning', value: warningString })
-                .setFooter({ text: `User ID: ${targetUser.id}` })
+                .addFields({ name: 'Warning', value: savedWarn.warning })
+                .setFooter({ text: `Warning ID: ${savedWarn.id}` })
                 .setColor('Green');
         },
         log(inter, targetUser) {
@@ -115,18 +115,16 @@ const moderation = {
                 .setFooter({ text: `User ID: ${targetUser.id}` })
                 .setTimestamp()
         },
-        dm(inter, warningString) {
+        dm(moderatorTag, savedWarn) {
             return new EmbedBuilder()
-                .setAuthor({
-                    name: `You have been warned in ${inter.guild.name}`,
-                    iconURL: inter.guild.iconURL()
-                })
+                .setTitle('Warning Information')
+                .setDescription(savedWarn.warning)
                 .addFields(
-                    { name: 'Moderator', value: inter.user.tag },
-                    { name: 'Warning', value: warningString }
+                    { name: 'Time', value: `<t:${savedWarn.time}:R>`},
+                    { name: 'Moderator', value: moderatorTag },
+                    { name: 'Appeal', value: `To appeal, please dm a moderator or higher with the following ID: \`${savedWarn.id}\``}
                 )
                 .setColor('Red')
-                .setTimestamp()
         },
         responseGet(inter, targetUser, userWarnings) {
             const embed = new EmbedBuilder()
@@ -141,6 +139,19 @@ const moderation = {
                 embed.addFields({ name: `ID: ${warn.id} | Moderator: ${inter.guild.members.cache.get(warn.moderator).user.tag}`, value: `**Warning:** ${warn.warning}\n<t:${warn.time}:R>` });
             }
             return embed;
+        },
+        responseRemove(targetUser, warn) {
+            return new EmbedBuilder()
+                .setAuthor({
+                    name: `Removed warning for ${targetUser.id}`,
+                    iconURL: targetUser.displayAvatarURL
+                })
+                .addFields(
+                    { name: 'ID', value: warn.id },
+                    { name: 'Warning', value: warn.warning }
+                )
+                .setFooter({ text: `User ID: ${targetUser.id}` })
+                .setColor('Green')
         }
     }
 };

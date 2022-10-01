@@ -58,7 +58,7 @@ async function execute(inter) {
                 return;
             };
 
-            await new Warn({
+            const savedWarn = await new Warn({
                 warning: warningString,
                 target: targetUser.id,
                 moderator: user.id,
@@ -68,10 +68,10 @@ async function execute(inter) {
 
             // TODO: Add warning role system
 
-            await inter.editReply({ embeds: [embeds.responseAdd(targetUser, warningString)] });
+            await inter.editReply({ embeds: [embeds.responseAdd(targetUser, savedWarn)] });
             await guild.channels.cache.get(channels.log.warn).send({ embeds: [embeds.log(inter, targetUser)] });
             try {
-                await targetUser.send({ embeds: [embeds.dm(inter, warningString)] });
+                await targetUser.send({ content: 'You have recieved a warning:', embeds: [embeds.dm(user.tag, savedWarn)] });
             } catch (err) {
                 console.error(err);
                 await inter.followUp({ content: "Couldn't DM user, they have still been warned", ephemeral: true });
@@ -86,14 +86,14 @@ async function execute(inter) {
 
         case 'remove': // Warning remove
             const warningId = options.getString('id');
-            const warning = await Warn.findOne({ id: warningId });
-            if (!warning) {
+            const warn = await Warn.findOne({ id: warningId });
+            if (!warn) {
                 await inter.editReply('Cancelled command');
                 await inter.followUp({ content: `Couldn't find a warning with ID \`${warningId}\``, ephemeral: true });
                 return;
             }
-            await warning.remove();
-            await inter.editReply(`Succesfully removed warning with ID \`${warningId}\``) // TODO: make a sexy embed for this
+            await warn.remove();
+            await inter.editReply({ embeds: [embeds.resoponseRemove(targetUser, warn)]}) // TODO: make a sexy embed for this
             return;
 
         case 'clear': //TODO: Finish button interactions
