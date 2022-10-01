@@ -42,6 +42,14 @@ const info = new SlashCommandBuilder()
         .addUserOption(option => option
             .setName('user')
             .setDescription('Select a user')
+            .setRequired(true)))
+
+    .addSubcommand(cmd => cmd // Warn show
+        .setName('show')
+        .setDescription('Fetch a single warning with a warning ID')
+        .addStringOption(option => option
+            .setName('id')
+            .setDescription('Provide a warning ID')
             .setRequired(true)));
 
 async function execute(inter) {
@@ -53,8 +61,7 @@ async function execute(inter) {
         case 'add': // Warning add
             const warningString = options.getString('warning');
             if (warningString.length > 350) {
-                await inter.editReply('Cancelled command');
-                await inter.followUp({ content: 'Keep your timeout reason under 350 characters! (includes spaces)', ephemeral: true });
+                await inter.editReply({ content: 'Keep your timeout reason under 350 characters! (includes spaces)', ephemeral: true });
                 return;
             };
 
@@ -68,10 +75,10 @@ async function execute(inter) {
 
             // TODO: Add warning role system
 
-            await inter.editReply({ embeds: [embeds.responseAdd(targetUser, savedWarn)] });
-            await guild.channels.cache.get(channels.log.warn).send({ embeds: [embeds.log(inter, targetUser)] });
+            await inter.editReply({ embeds: [embeds.responseAdd(savedWarn)] });
+            await guild.channels.cache.get(channels.log.warn).send({ embeds: [embeds.log(savedWarn)] });
             try {
-                await targetUser.send({ content: 'You have recieved a warning:', embeds: [embeds.dm(user.tag, savedWarn)] });
+                await targetUser.send({ content: 'You have recieved a warning:', embeds: [embeds.dm(savedWarn)] });
             } catch (err) {
                 console.error(err);
                 await inter.followUp({ content: "Couldn't DM user, they have still been warned", ephemeral: true });
@@ -85,18 +92,15 @@ async function execute(inter) {
             return;
 
         case 'remove': // Warning remove
-            const warningId = options.getString('id');
-            const warn = await Warn.findOne({ id: warningId });
-            if (!warn) {
-                await inter.editReply('Cancelled command');
-                await inter.followUp({ content: `Couldn't find a warning with ID \`${warningId}\``, ephemeral: true });
-                return;
-            }
-            await warn.remove();
-            await inter.editReply({ embeds: [embeds.resoponseRemove(targetUser, warn)]}) // TODO: make a sexy embed for this
+            const warningIdRemove = options.getString('id');
+            const removeWarning = await Warn.findOne({ id: warningIdRemove });
+            if (!removeWarning) return await inter.editReply({ content: `Couldn't find a warning with ID \`${warningIdRemove}\``, ephemeral: true });
+                
+            await removeWarning.remove();
+            await inter.editReply({ embeds: [embeds.responseRemove(removeWarning)]});
             return;
 
-        case 'clear': //TODO: Finish button interactions
+        case 'clear':
             const clearButtons = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
@@ -115,6 +119,7 @@ async function execute(inter) {
 
             const filter = pressedButton => pressedButton.customId === 'clearWarns_yes' || pressedButton.customId === 'clearWarns_no';
             const collector = inter.channel.createMessageComponentCollector({ filter, time: 10000 });
+            let interacted = false;
 
             // TODO: fix button interaction overlapping. Possible fix: generate id's
             collector.on('collect', async buttonInter => {
@@ -123,7 +128,8 @@ async function execute(inter) {
                     ephemeral: true
                 });
                 collector.stop();
-
+                interacted = true;
+                
                 switch (buttonInter.customId) {
                     case 'clearWarns_yes':
                         const deletedWarns = await Warn.deleteMany({ target: targetUser.id });
@@ -131,11 +137,29 @@ async function execute(inter) {
                         return inter.editReply({ content: `Succesfully removed ${deletedWarns.deletedCount} warnings for ${targetUser.tag}`, components: [] })
 
                     case 'clearWarns_no':
-                        inter.editReply({ content: 'Cancelled command', components: [] });
+                        return inter.editReply({ content: 'Cancelled command', components: [] });
                 }
             });
 
-            collector.on('end') // TODO: Finish this collector
+            collector.on('end', collectedInteractions => {
+                if(!collectedInteractions.some(entry => entry.user.id === user.id) && interacted === false) {
+                    inter.editReply({
+                        content: 'Interaction ran out of time',
+                        components: []
+                    });
+                };
+            });
+            return;
+        case 'show':
+            const warningIdShow = options.getString('id');
+            const warnShow = await Warn.findOne({ id: warningIdShow });
+            if (!warnShow) {
+                await inter.editReply('Cancelled command');
+                await inter.followUp({ content: `Couldn't find a warning with ID \`${warningIdShow}\``, ephemeral: true });
+                return;
+            }
+            await inter.editReply({ embeds: [embeds.responseShow(warnShow)]});
+            return;
     };
 };
 

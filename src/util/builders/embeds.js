@@ -54,7 +54,7 @@ const moderation = {
                     { name: 'Time', value: formattedTimeoutLength }
                 )
                 .setFooter({ text: `User ID: ${targetMember.user.id}` })
-                .setColor('Green')
+                .setColor('Purple')
         },
         dm(inter, timeoutReason, formattedTimeoutLength) {
             return new EmbedBuilder()
@@ -89,69 +89,77 @@ const moderation = {
         }
     },
     warn: {
-        responseAdd(targetUser, savedWarn) {
+        responseAdd(savedWarn) {
             return new EmbedBuilder()
-                .setAuthor({
-                    name: `Succesfully warned ${targetUser.tag}`,
-                    iconURL: targetUser.displayAvatarURL()
-                })
-                .addFields({ name: 'Warning', value: savedWarn.warning })
+                .setTitle('Warned User')
+                .setDescription(savedWarn.warning)
+                .addFields(
+                    { name: 'User', value: `<@${savedWarn.target}>` },
+                    { name: 'Time', value: `<t:${savedWarn.time}:R>` }
+                )
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
-                .setColor('Green');
+                .setColor('Red');
         },
-        log(inter, targetUser) {
+        log(savedWarn) {
             return new EmbedBuilder()
                 .setTitle('New warning')
-                .setAuthor({
-                    name: targetUser.tag,
-                    iconURL: targetUser.displayAvatarURL()
-                })
+                .setDescription(savedWarn.warning)
                 .addFields(
-                    { name: 'User', value: `<@${targetUser.id}>`, inline: true },
-                    { name: 'Moderator', value: `<@${inter.user.id}>`, inline: true },
-                    { name: 'Warning', value: inter.options.getString('warning') }
+                    { name: 'User', value: `<@${savedWarn.target}>` },
+                    { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
+                    { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
-                .setColor('Red')
-                .setFooter({ text: `User ID: ${targetUser.id}` })
-                .setTimestamp()
+                .setFooter({ text: `Warning ID: ${savedWarn.id}` })
+                .setColor('Purple')
         },
-        dm(moderatorTag, savedWarn) {
+        dm(savedWarn) {
             return new EmbedBuilder()
                 .setTitle('Warning Information')
                 .setDescription(savedWarn.warning)
                 .addFields(
-                    { name: 'Time', value: `<t:${savedWarn.time}:R>`},
-                    { name: 'Moderator', value: moderatorTag },
-                    { name: 'Appeal', value: `To appeal, please dm a moderator or higher with the following ID: \`${savedWarn.id}\``}
+                    { name: 'Time', value: `<t:${savedWarn.time}:R>` },
+                    { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
+                    { name: 'Appeal', value: `To appeal, please dm a moderator or higher with the following ID: \`${savedWarn.id}\`` }
                 )
                 .setColor('Red')
         },
-        responseGet(inter, targetUser, userWarnings) {
+        responseGet(inter, targetUser, userWarnings) { // TODO: remake this embed (hiddenbot reference)
             const embed = new EmbedBuilder()
                 .setAuthor({
                     name: `Showing warnings for ${targetUser.tag}`,
                     iconURL: targetUser.displayAvatarURL()
                 })
                 .setFooter({ text: `User ID: ${targetUser.id}` })
-                .setColor('Green');
+                .setColor('Purple');
 
             for (const warn of userWarnings) {
                 embed.addFields({ name: `ID: ${warn.id} | Moderator: ${inter.guild.members.cache.get(warn.moderator).user.tag}`, value: `**Warning:** ${warn.warning}\n<t:${warn.time}:R>` });
             }
             return embed;
         },
-        responseRemove(targetUser, warn) {
+        responseRemove(savedWarn) {
             return new EmbedBuilder()
-                .setAuthor({
-                    name: `Removed warning for ${targetUser.id}`,
-                    iconURL: targetUser.displayAvatarURL
-                })
+                .setTitle('Removed Warning')
+                .setDescription(savedWarn.warning)
                 .addFields(
-                    { name: 'ID', value: warn.id },
-                    { name: 'Warning', value: warn.warning }
+                    { name: 'User', value: `<@${savedWarn.target}>` },
+                    { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
+                    { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
-                .setFooter({ text: `User ID: ${targetUser.id}` })
-                .setColor('Green')
+                .setFooter({ text: `Warning ID: ${savedWarn.id}` })
+                .setColor('Purple')
+        },
+        responseShow(savedWarn) {
+            return new EmbedBuilder()
+                .setTitle('Warning Information')
+                .setDescription(savedWarn.warning)
+                .addFields(
+                    { name: 'User', value: `<@${savedWarn.target}>` },
+                    { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
+                    { name: 'Time', value: `<t:${savedWarn.time}:R>` }
+                    )
+                .setFooter({ text: `Warning ID: ${savedWarn.id}` })
+                .setColor('Purple')
         }
     }
 };
@@ -161,11 +169,11 @@ const misc = {
         return new EmbedBuilder()
             .setTitle('⚠ New Error')
             .setDescription('Check the bot console for more information')
-            .setFooter({ text: 'Anti-Crash System™' })
             .addFields(
                 { name: 'Type', value: type },
                 { name: 'Error', value: `\`${err.message}\`` }
             )
+            .setFooter({ text: 'Anti-Crash System™' })
             .setColor('Red');
     }
 };
@@ -199,7 +207,7 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter({ text: `User ID: ${user.id}` })
-            .setColor('Green')
+            .setColor('Purple')
     },
     reportEditApproved(reportEmbed, user) {
         return new EmbedBuilder()
@@ -207,7 +215,7 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter(reportEmbed.footer)
-            .setColor('Green')
+            .setColor('Purple')
     },
     reportDeclined(reportEmbed, user) {
         return new EmbedBuilder()
