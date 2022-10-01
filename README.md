@@ -1,7 +1,7 @@
 # Welcome to scrappy-bot!
 
 **Steps on self-hosting:**
-- Clone the repository with `git clone https://github.com/YP501/frankie-bot.git`
+- Clone the repository with `git clone https://github.com/YP501/scrappy-bot.git`
 - Install the node modules with `yarn install`
 - Add a .env file in the root folder with the following values:
 ```
