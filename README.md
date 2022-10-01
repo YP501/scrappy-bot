@@ -1,5 +1,4 @@
 # Welcome to scrappy-bot!
-(previously known as HelikopterBot)
 
 **Steps on self-hosting:**
 - Clone the repository with `git clone https://github.com/YP501/frankie-bot.git`
@@ -17,3 +16,4 @@ dbAuthDev = "your mongo authentication uri here"
 - You are allowed to self-host this bot but you are not allowed to impersonate this bot as Frankie's bot.
 - If you decide to self-host, keep in mind it only works for **one** server at a time.
 - You **MUST** credit the original author of this repository when self-hosting and **cannot** claim it as your own.
+- This bot was previously named Helikopter Bot and was renamed to Scrappy
