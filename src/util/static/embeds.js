@@ -97,16 +97,17 @@ const moderation = {
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
                 .setColor('Red');
         },
-        log(savedWarn) {
+        log(savedWarn, messageUrl) {
             return new EmbedBuilder()
                 .setTitle('New warning')
+                .setURL(messageUrl)
                 .setDescription(savedWarn.warning)
                 .addFields(
                     { name: 'User', value: `<@${savedWarn.target}>` },
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
                     { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
-                .setFooter({ text: `Warning ID: ${savedWarn.id}` })
+                .setFooter({ text: `Warning ID: ${savedWarn.id} | User ID: ${savedWarn.target}` })
                 .setColor('Blue')
         },
         dm(savedWarn) {
@@ -154,7 +155,7 @@ const moderation = {
                     { name: 'User', value: `<@${savedWarn.target}>` },
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
                     { name: 'Time', value: `<t:${savedWarn.time}:R>` }
-                    )
+                )
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
                 .setColor('Purple')
         }
