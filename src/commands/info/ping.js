@@ -5,10 +5,10 @@ const info = new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Check bot and API latency');
 
-async function execute(inter) {
-    await inter.deferReply({ fetchReply: true }).then(resultInter => {
+const execute = (inter) => {
+    inter.deferReply({ fetchReply: true }).then(resultInter => {
         const ping = resultInter.createdTimestamp - inter.createdTimestamp;
-        inter.editReply({ embeds: [embeds.ping(inter, ping)] });
+        inter.editReply({ embeds: [embeds.ping(inter.client.ws.ping, ping)] });
     });
 };
 

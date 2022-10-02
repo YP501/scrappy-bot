@@ -7,15 +7,15 @@ const info = new SlashCommandBuilder()
     .setName('reddit')
     .setDescription('Get a random post from some funny subreddits')
 
-async function execute(inter) {
-    await inter.deferReply();
+const execute = async (inter) => {
+    inter.deferReply();
 
     let post = await getPost(subReddits);
     while (!post.url.includes('jpg') && !post.url.includes('png')) {
         post = await getPost(subReddits);
     };
 
-    await inter.editReply({ embeds: [embeds.reddit(post)] });
+    inter.editReply({ embeds: [embeds.reddit(post)] });
 };
 
 module.exports = {

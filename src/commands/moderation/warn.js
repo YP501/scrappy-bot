@@ -52,7 +52,7 @@ const info = new SlashCommandBuilder()
             .setDescription('Provide a warning ID')
             .setRequired(true)));
 
-async function execute(inter) {
+const execute = async (inter) => {
     await inter.deferReply();
     const { options, user, guild } = inter;
     const targetUser = inter.options.getUser('user');

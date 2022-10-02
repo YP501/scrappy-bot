@@ -5,9 +5,9 @@ const info = new SlashCommandBuilder()
     .setName('about')
     .setDescription('Responds with some information about the bot and the server');
 
-async function execute(inter) {
+const execute = (inter) => {
     const { client } = inter;
-    await inter.reply({ embeds: [embeds.about(client)] });
+    inter.reply({ embeds: [embeds.about(client)] });
 };
 
 module.exports = {

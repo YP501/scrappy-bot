@@ -14,7 +14,7 @@ const info = new SlashCommandBuilder()
             .setDescription('Put the JavaScript code you want executed here')
             .setRequired(true));
 
-async function execute(inter) {
+const execute = async (inter) => {
     const { user, options } = inter;
 
     // Permission check for eval
@@ -26,7 +26,7 @@ async function execute(inter) {
     } catch (err) {
         try {
             return await inter.reply(`**ERROR**:\n\`${err}\``);
-        } catch (_) {
+        } catch {
             return await inter.followUp(`**ERROR**:\n\`${err}\``);
         }
     };
@@ -35,13 +35,13 @@ async function execute(inter) {
         if (typeof output !== 'string') output = require('util').inspect(output, { depth: 0 });
         try {
             await inter.reply(`**OUTPUT**:${codeBlock('js', output)}`);
-        } catch (_) {
+        } catch {
             await inter.followUp(`**OUTPUT**:${codeBlock('js', output)}`);
         }
     } else {
         try {
             await inter.reply('Executed code successfully with no returned value!')
-        } catch (_) {
+        } catch {
             await inter.followUp('Executed code successfully with no returned value!');
         }
     };

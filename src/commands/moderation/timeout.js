@@ -19,7 +19,7 @@ const info = new SlashCommandBuilder()
         .setName('reason')
         .setDescription('The reason for timing out this user (not required)'))
 
-async function execute(inter) {
+const execute = async (inter) => {
     await inter.deferReply();
     const { options, guild, user } = inter;
 
