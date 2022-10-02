@@ -1,4 +1,4 @@
-# Welcome to scrappy-bot, a Discord bot made for FrankieFms!
+# Welcome to scrappy-bot, Frankie's Discord bot!
 
 **Steps on self-hosting:**
 - Clone the repository with `git clone https://github.com/YP501/scrappy-bot.git`
