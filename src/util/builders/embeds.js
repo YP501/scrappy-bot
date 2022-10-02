@@ -27,12 +27,12 @@ const info = {
             .setFooter({ text: `Uptime: ${formatTime(new Date().getTime() - unixCode)} | © 2022 FrankieFms` })
             .setColor('Orange');
     },
-    ping(inter, ping) {
+    ping(wsPing, ping) {
         return new EmbedBuilder()
             .setTitle('🏓 Pong!')
             .addFields(
                 { name: 'Bot latency', value: `${ping}ms`, inline: true },
-                { name: 'API latency', value: `${Math.round(inter.client.ws.ping)}ms`, inline: true }
+                { name: 'API latency', value: `${Math.round(wsPing)}ms`, inline: true }
             )
             .setColor('Orange');
     }
