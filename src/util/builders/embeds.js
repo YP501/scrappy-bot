@@ -1,6 +1,6 @@
 const { EmbedBuilder, codeBlock } = require('discord.js');
 const { formatTime, formatBlacklist } = require('../functions');
-const config = require('../../config.json');
+const { version } = require('../../config.json');
 
 const fun = {
     reddit(post) {
@@ -9,7 +9,7 @@ const fun = {
             .setDescription(post.title)
             .setURL(`https://reddit.com${post.permalink}`)
             .setImage(post.url)
-            .setColor("Orange");
+            .setColor("Purple");
     }
 };
 
@@ -20,12 +20,12 @@ const info = {
         return new EmbedBuilder()
             .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
             .addFields(
-                { name: 'Version', value: config.version, inline: true },
+                { name: 'Version', value: version, inline: true },
                 { name: 'Developer', value: '<@513709333494628355>', inline: true },
                 { name: 'Source Code', value: '[Github](https://github.com/YP501/scrappy-bot)', inline: true }
             )
             .setFooter({ text: `Uptime: ${formatTime(new Date().getTime() - unixCode)} | © 2022 FrankieFms` })
-            .setColor('Orange');
+            .setColor('Purple');
     },
     ping(wsPing, ping) {
         return new EmbedBuilder()
@@ -34,7 +34,7 @@ const info = {
                 { name: 'Bot latency', value: `${ping}ms`, inline: true },
                 { name: 'API latency', value: `${Math.round(wsPing)}ms`, inline: true }
             )
-            .setColor('Orange');
+            .setColor('Purple');
     }
 };
 
@@ -80,7 +80,7 @@ const moderation = {
                     { name: 'Reason', value: timeoutReason },
                     { name: 'Time', value: formattedTimeoutLength }
                 )
-                .setColor('Red')
+                .setColor('Blue')
                 .setFooter({ text: `User ID: ${targetMember.user.id}` })
                 .setTimestamp()
         }
@@ -107,7 +107,7 @@ const moderation = {
                     { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
-                .setColor('Purple')
+                .setColor('Blue')
         },
         dm(savedWarn) {
             return new EmbedBuilder()
@@ -204,7 +204,7 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter({ text: `User ID: ${user.id}` })
-            .setColor('Purple')
+            .setColor('Green')
     },
     reportEditApproved(reportEmbed, user) {
         return new EmbedBuilder()
@@ -212,7 +212,7 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter(reportEmbed.footer)
-            .setColor('Purple')
+            .setColor('Green')
     },
     reportDeclined(reportEmbed, user) {
         return new EmbedBuilder()
