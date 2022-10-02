@@ -1,5 +1,5 @@
 const { channels } = require('../../config.json');
-const embeds = require('../../util/builders/embeds').misc;
+const embeds = require('../../util/static/embeds').misc;
 
 module.exports.execute = (client) => {
     process.on('unhandledRejection', (reason, promise) => {

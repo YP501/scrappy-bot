@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getPost } = require('random-reddit');
 const { subReddits } = require('../../config.json');
-const embeds = require('../../util/builders/embeds').fun;
+const embeds = require('../../util/static/embeds').fun;
 
 const info = new SlashCommandBuilder()
     .setName('reddit')

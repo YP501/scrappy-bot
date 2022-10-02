@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs');
-const embeds = require('./builders/embeds').util;
-const buttons = require('./builders/buttons').misc.foundBlacklistedUrl;
+const embeds = require('./static/embeds').util;
+const buttons = require('./static/buttons').misc.foundBlacklistedUrl;
 
 function filterUrl(msg) {
     // const regex = /https?:\/\/[^\s$.?#].[^\s]*$/gm;

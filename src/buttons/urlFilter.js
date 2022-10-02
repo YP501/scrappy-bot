@@ -1,7 +1,7 @@
 const { channels } = require('../config.json');
-const userButtons = require('../util/builders/buttons').misc.foundBlacklistedUrl;
-const modButtons = require('../util/builders/buttons').misc
-const embeds = require('../util/builders/embeds').util;
+const userButtons = require('../util/static/buttons').misc.foundBlacklistedUrl;
+const modButtons = require('../util/static/buttons').misc
+const embeds = require('../util/static/embeds').util;
 
 module.exports = {
     id: 'urlmistake',

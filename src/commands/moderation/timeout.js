@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const Infraction = require('../../structures/schemas/infraction');
-const embeds = require('../../util/builders/embeds').moderation.timeout;
+const embeds = require('../../util/static/embeds').moderation.timeout;
 const config = require('../../config.json');
 const ms = require('ms');
 

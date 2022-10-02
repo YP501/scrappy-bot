@@ -1,4 +1,4 @@
-const embeds = require('../util/builders/embeds').util;
+const embeds = require('../util/static/embeds').util;
 
 module.exports = {
     id: 'filterreviewdeclined',

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const Warn = require('../../structures/schemas/warn');
-const embeds = require('../../util/builders/embeds').moderation.warn;
+const embeds = require('../../util/static/embeds').moderation.warn;
 const { channels, roles } = require('../../config.json');
 const { generateId } = require('../../util/functions');
 

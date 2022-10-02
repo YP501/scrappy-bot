@@ -1,12 +1,12 @@
 {
+    "version": "v4.0",
+    "guildId": "928369763552464997",
     "intents": [
         "Guilds",
         "GuildMessages",
         "GuildMembers",
         "MessageContent"
     ],
-    "version": "v4.0",
-    "guildId": "928369763552464997",
     "channels": {
         "error": "933770206008991805",
         "filterReview": "1002548216941785118",
@@ -14,6 +14,13 @@
             "timeout": "1011022661926785125",
             "warn": "1012018634291433582"
         }
+    },
+    "roles": {
+        "warnings": [
+            "1026192331096989837",
+            "1026196095140892792",
+            "1026196098257272954"
+        ]
     },
     "cmdCooldown": 2000,
     "xpSettings": {
