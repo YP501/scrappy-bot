@@ -8,7 +8,7 @@ module.exports = {
             ?.catch(async err => {
                 try {
                     await inter.reply({ content: 'An error has occured while executing the button! If this issue persists, please contact <@513709333494628355>', ephemeral: true })
-                } catch (_) {
+                } catch {
                     await inter.followUp({ content: 'An error has occured while executing the  button! If this issue persists, please contact <@513709333494628355>', ephemeral: true });
                 } finally {
                     throw err;
