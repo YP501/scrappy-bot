@@ -6,9 +6,8 @@ const info = new SlashCommandBuilder()
     .setDescription('Responds with some information about the bot and the server');
 
 async function execute(inter) {
-    const { client, guild } = inter;
-    const memberCount = await guild.members.fetch().then(members => members.filter((member) => !member.user.bot).size)//filter((members) => !members.user.bot).size
-    await inter.reply({ embeds: [embeds.about(client, memberCount)] });
+    const { client } = inter;
+    await inter.reply({ embeds: [embeds.about(client)] });
 };
 
 module.exports = {

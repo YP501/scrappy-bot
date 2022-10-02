@@ -16,16 +16,13 @@ const fun = {
 const unixCode = new Date().getTime();
 
 const info = {
-    about(client, memberCount) {
+    about(client) {
         return new EmbedBuilder()
             .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
             .addFields(
                 { name: 'Version', value: config.version, inline: true },
-                { name: 'Library', value: '[Discord.js](https://discord.js.org/#/)', inline: true },
                 { name: 'Developer', value: '<@513709333494628355>', inline: true },
-                { name: 'Host', value: '[sparkedhost](https://sparkedhost.com/)', inline: true },
-                { name: 'Credits', value: '[View here](https://pastebin.com/raw/sjgjNRA9)', inline: true },
-                { name: 'Users', value: memberCount.toString(), inline: true }
+                { name: 'Source Code', value: '[Github](https://github.com/YP501/scrappy-bot)', inline: true }
             )
             .setFooter({ text: `Uptime: ${formatTime(new Date().getTime() - unixCode)} | © 2022 FrankieFms` })
             .setColor('Orange');
