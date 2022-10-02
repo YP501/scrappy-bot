@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const Warn = require('../../structures/schemas/warn');
 const embeds = require('../../util/builders/embeds').moderation.warn;
-const { channels } = require('../../config.json');
+const { channels, roles } = require('../../config.json');
 const { generateId } = require('../../util/functions');
 
 const info = new SlashCommandBuilder()
@@ -55,13 +55,14 @@ const info = new SlashCommandBuilder()
 const execute = async (inter) => {
     await inter.deferReply();
     const { options, user, guild } = inter;
-    const targetUser = inter.options.getUser('user');
+    const targetMember = inter.options.getMember('user');
+    const targetUser = targetMember.user;
 
     switch (options.getSubcommand()) {
         case 'add': // Warning add
             const warningString = options.getString('warning');
             if (warningString.length > 350) {
-                await inter.editReply({ content: 'Keep your timeout reason under 350 characters! (includes spaces)', ephemeral: true });
+                inter.editReply('Keep your timeout reason under 350 characters! (includes spaces)');
                 return;
             };
 
