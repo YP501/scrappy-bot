@@ -1,16 +1,16 @@
 # Welcome to scrappy-bot, Frankie's Discord bot!
 
 **Steps on self-hosting:**
-- Clone the repository with `git clone https://github.com/YP501/scrappy-bot.git`
-- Install the node modules with `yarn install`
-- Add a .env file in the root folder with the following values:
+1. Clone the repository with `git clone https://github.com/YP501/scrappy-bot.git` and `cd` into the folder
+2. Install the node modules with `yarn install` or `npm install`
+3. Add a .env file in the root folder with the following values:
 ```
 tokenDev = "your bot token here"
 dbAuthDev = "your mongo authentication uri here"
 ```
-- Tweak the values in [config.json](https://github.com/YP501/frankie-bot/blob/main/src/config.json) to match the id's of your server
-- Run `node main.js`
-- You're done!
+4. Tweak the values in `./src/config.json` to match the id's of your server
+5. Run `node main.js`
+6. You're done!
 
 ## Notes
 - You are allowed to self-host this bot but you are not allowed to impersonate this bot as Frankie's bot.
