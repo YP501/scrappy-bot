@@ -8,7 +8,7 @@
 tokenDev = "your bot token here"
 dbAuthDev = "your mongo authentication uri here"
 ```
-4. Tweak the values in `config.json` to match the id's of your server
+4. Tweak the values in `./src/config.json` to match the id's of your server
 5. Run `node main.js`
 6. You're done!
 
