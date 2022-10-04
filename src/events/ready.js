@@ -1,4 +1,5 @@
-const { version, guildId } = require('../config.json');
+const { guildId } = require('../config.json');
+const { version } = require('../../package.json');
 
 module.exports = {
     name: 'ready',

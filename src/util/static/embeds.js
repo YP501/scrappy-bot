@@ -1,6 +1,6 @@
 const { EmbedBuilder, codeBlock } = require('discord.js');
 const { formatTime, formatBlacklist } = require('../functions');
-const { version } = require('../../config.json');
+const { version } = require('../../../package.json');
 
 const fun = {
     reddit(post) {
