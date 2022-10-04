@@ -1,4 +1,5 @@
 # Welcome to scrappy-bot, Frankie's Discord bot!
+> Developed and maintained by [@YP501](https://github.com/YP501)
 
 **Steps on self-hosting:**
 1. Clone the repository with `git clone https://github.com/YP501/scrappy-bot.git` and `cd` into the folder
