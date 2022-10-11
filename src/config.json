@@ -1,11 +1,6 @@
 {
     "guildId": "928369763552464997",
-    "intents": [
-        "Guilds",
-        "GuildMessages",
-        "GuildMembers",
-        "MessageContent"
-    ],
+    "intents": ["Guilds", "GuildMessages", "GuildMembers", "MessageContent"],
     "channels": {
         "error": "933770206008991805",
         "filterReview": "1002548216941785118",
@@ -15,11 +10,7 @@
         }
     },
     "roles": {
-        "warnings": [
-            "1026192331096989837",
-            "1026196095140892792",
-            "1026196098257272954"
-        ]
+        "warnings": ["1026192331096989837", "1026196095140892792", "1026196098257272954"]
     },
     "cmdCooldown": 2000,
     "xpSettings": {
@@ -28,13 +19,5 @@
         "maxXp": 30,
         "chatCooldown": 30000
     },
-    "subReddits": [
-        "ComedyCemetery",
-        "memes",
-        "CrappyDesign",
-        "ihadastroke",
-        "bingbongtheorem",
-        "gocommitdie",
-        "robloxmemes"
-    ]
+    "subReddits": ["ComedyCemetery", "memes", "CrappyDesign", "ihadastroke", "bingbongtheorem", "gocommitdie", "robloxmemes"]
 }

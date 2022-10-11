@@ -2,7 +2,7 @@ const { SlashCommandBuilder, codeBlock } = require('discord.js');
 
 const info = new SlashCommandBuilder()
     .setName('eval')
-    .setDescription("Execute any piece of JavaScript code on the bot's end")
+    .setDescription('Execute any piece of JavaScript code on the bot\'s end')
     .addBooleanOption((option) =>
         option.setName('void').setDescription('Decides if the bot replies with the output or no, set this to true if you want to be safe').setRequired(true)
     )

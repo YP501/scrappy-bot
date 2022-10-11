@@ -16,7 +16,7 @@ module.exports = {
                     content: 'An error has occured while executing the command! If this issue persists, please contact <@513709333494628355>',
                     ephemeral: true,
                 });
-            } catch (_) {
+            } catch {
                 await inter.followUp({
                     content: 'An error has occured while executing the command! If this issue persists, please contact <@513709333494628355>',
                     ephemeral: true,
