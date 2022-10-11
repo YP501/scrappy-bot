@@ -8,6 +8,6 @@ client.commands = new Collection();
 client.buttons = new Collection();
 
 // Call handler files
-readdirSync('./src/structures/handlers').forEach(file => require(`./structures/handlers/${file}`).execute(client));
+readdirSync('./src/structures/handlers').forEach((file) => require(`./structures/handlers/${file}`).execute(client));
 
 client.login(process.env.tokenDev);

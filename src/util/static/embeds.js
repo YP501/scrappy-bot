@@ -1,6 +1,7 @@
 const { EmbedBuilder, codeBlock } = require('discord.js');
 const { formatTime, formatBlacklist } = require('../functions');
 const { version } = require('../../../package.json');
+const unixCode = new Date().getTime();
 
 const fun = {
     reddit(post) {
@@ -9,33 +10,31 @@ const fun = {
             .setDescription(post.title)
             .setURL(`https://reddit.com${post.permalink}`)
             .setImage(post.url)
-            .setColor("Purple");
-    }
+            .setColor('Purple');
+    },
 };
-
-const unixCode = new Date().getTime();
 
 const info = {
     about(client) {
-        return new EmbedBuilder()
-            .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
-            .addFields(
-                { name: 'Version', value: version, inline: true },
-                { name: 'Developer', value: '<@513709333494628355>', inline: true },
-                { name: 'Source Code', value: '[Github](https://github.com/YP501/scrappy-bot)', inline: true }
-            )
-            .setFooter({ text: `Uptime: ${formatTime(new Date().getTime() - unixCode)} | © 2022 FrankieFms` })
-            .setColor('Purple');
+        return (
+            new EmbedBuilder()
+                .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
+                // ⚠ Changing any of the fields goes against the terms of use! ⚠
+                .addFields(
+                    { name: 'Version', value: version, inline: true },
+                    { name: 'Developer', value: '<@513709333494628355>', inline: true },
+                    { name: 'Source Code', value: '[Github](https://github.com/YP501/scrappy-bot)', inline: true }
+                )
+                .setFooter({ text: `Uptime: ${formatTime(new Date().getTime() - unixCode)} | © 2022 YP501` })
+                .setColor('Purple')
+        );
     },
     ping(wsPing, ping) {
         return new EmbedBuilder()
             .setTitle('🏓 Pong!')
-            .addFields(
-                { name: 'Bot latency', value: `${ping}ms`, inline: true },
-                { name: 'API latency', value: `${Math.round(wsPing)}ms`, inline: true }
-            )
+            .addFields({ name: 'Bot latency', value: `${ping}ms`, inline: true }, { name: 'API latency', value: `${Math.round(wsPing)}ms`, inline: true })
             .setColor('Purple');
-    }
+    },
 };
 
 const moderation = {
@@ -44,35 +43,28 @@ const moderation = {
             return new EmbedBuilder()
                 .setAuthor({
                     name: `Timed out ${targetMember.user.tag}`,
-                    iconURL: targetMember.user.displayAvatarURL()
+                    iconURL: targetMember.user.displayAvatarURL(),
                 })
-                .addFields(
-                    { name: 'Reason', value: timeoutReason },
-                    { name: 'Time', value: formattedTimeoutLength }
-                )
+                .addFields({ name: 'Reason', value: timeoutReason }, { name: 'Time', value: formattedTimeoutLength })
                 .setFooter({ text: `User ID: ${targetMember.user.id}` })
-                .setColor('Purple')
+                .setColor('Purple');
         },
         dm(inter, timeoutReason, formattedTimeoutLength) {
             return new EmbedBuilder()
                 .setAuthor({
                     name: `You have been timed out in ${inter.guild.name}`,
-                    iconURL: inter.guild.iconURL()
+                    iconURL: inter.guild.iconURL(),
                 })
-                .addFields(
-                    { name: 'Moderator', value: inter.user.tag },
-                    { name: 'Time', value: formattedTimeoutLength },
-                    { name: 'Reason', value: timeoutReason }
-                )
+                .addFields({ name: 'Moderator', value: inter.user.tag }, { name: 'Time', value: formattedTimeoutLength }, { name: 'Reason', value: timeoutReason })
                 .setColor('Red')
-                .setTimestamp()
+                .setTimestamp();
         },
         log(targetMember, timeoutReason, inter, formattedTimeoutLength) {
             return new EmbedBuilder()
                 .setTitle('New timeout')
                 .setAuthor({
                     name: targetMember.user.tag,
-                    iconURL: targetMember.user.displayAvatarURL()
+                    iconURL: targetMember.user.displayAvatarURL(),
                 })
                 .addFields(
                     { name: 'User', value: `<@${targetMember.user.id}>`, inline: true },
@@ -82,18 +74,15 @@ const moderation = {
                 )
                 .setColor('Blue')
                 .setFooter({ text: `User ID: ${targetMember.user.id}` })
-                .setTimestamp()
-        }
+                .setTimestamp();
+        },
     },
     warn: {
         responseAdd(savedWarn) {
             return new EmbedBuilder()
                 .setTitle('Warned User')
                 .setDescription(savedWarn.warning)
-                .addFields(
-                    { name: 'User', value: `<@${savedWarn.target}>` },
-                    { name: 'Time', value: `<t:${savedWarn.time}:R>` }
-                )
+                .addFields({ name: 'User', value: `<@${savedWarn.target}>` }, { name: 'Time', value: `<t:${savedWarn.time}:R>` })
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
                 .setColor('Red');
         },
@@ -108,7 +97,7 @@ const moderation = {
                     { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
                 .setFooter({ text: `Warning ID: ${savedWarn.id} | User ID: ${savedWarn.target}` })
-                .setColor('Blue')
+                .setColor('Blue');
         },
         dm(savedWarn) {
             return new EmbedBuilder()
@@ -119,19 +108,23 @@ const moderation = {
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
                     { name: 'Appeal', value: `To appeal, please dm a moderator or higher with the following ID: \`${savedWarn.id}\`` }
                 )
-                .setColor('Red')
+                .setColor('Red');
         },
-        responseGet(inter, targetUser, userWarnings) { // TODO: remake this embed (hiddenbot reference)
+        responseGet(inter, targetUser, userWarnings) {
+            // TODO: remake this embed (hiddenbot reference)
             const embed = new EmbedBuilder()
                 .setAuthor({
                     name: `Showing warnings for ${targetUser.tag}`,
-                    iconURL: targetUser.displayAvatarURL()
+                    iconURL: targetUser.displayAvatarURL(),
                 })
                 .setFooter({ text: `User ID: ${targetUser.id}` })
                 .setColor('Purple');
 
             for (const warn of userWarnings) {
-                embed.addFields({ name: `ID: ${warn.id} | Moderator: ${inter.guild.members.cache.get(warn.moderator).user.tag}`, value: `**Warning:** ${warn.warning}\n<t:${warn.time}:R>` });
+                embed.addFields({
+                    name: `ID: ${warn.id} | Moderator: ${inter.guild.members.cache.get(warn.moderator).user.tag}`,
+                    value: `**Warning:** ${warn.warning}\n<t:${warn.time}:R>`,
+                });
             }
             return embed;
         },
@@ -145,7 +138,7 @@ const moderation = {
                     { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
-                .setColor('Purple')
+                .setColor('Purple');
         },
         responseShow(savedWarn) {
             return new EmbedBuilder()
@@ -157,9 +150,9 @@ const moderation = {
                     { name: 'Time', value: `<t:${savedWarn.time}:R>` }
                 )
                 .setFooter({ text: `Warning ID: ${savedWarn.id}` })
-                .setColor('Purple')
-        }
-    }
+                .setColor('Purple');
+        },
+    },
 };
 
 const misc = {
@@ -167,13 +160,10 @@ const misc = {
         return new EmbedBuilder()
             .setTitle('⚠ New Error')
             .setDescription('Check the bot console for more information')
-            .addFields(
-                { name: 'Type', value: type },
-                { name: 'Error', value: `\`${err.message}\`` }
-            )
+            .addFields({ name: 'Type', value: type }, { name: 'Error', value: `\`${err.message}\`` })
             .setFooter({ text: 'Anti-Crash System™' })
             .setColor('Red');
-    }
+    },
 };
 
 const util = {
@@ -181,9 +171,7 @@ const util = {
         return new EmbedBuilder()
             .setTitle('URL Blacklist Match Found')
             .setDescription(codeBlock(regexResult.input))
-            .addFields(
-                { name: 'Matched URL', value: codeBlock('css', formatBlacklist(regexResult, 10)) },
-            )
+            .addFields({ name: 'Matched URL', value: codeBlock('css', formatBlacklist(regexResult, 10)) })
             .setFooter({ text: 'Click the button below if this is a false positive (mistake).' })
             .setColor('Red');
     },
@@ -205,7 +193,7 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter({ text: `User ID: ${user.id}` })
-            .setColor('Green')
+            .setColor('Green');
     },
     reportEditApproved(reportEmbed, user) {
         return new EmbedBuilder()
@@ -213,7 +201,7 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter(reportEmbed.footer)
-            .setColor('Green')
+            .setColor('Green');
     },
     reportDeclined(reportEmbed, user) {
         return new EmbedBuilder()
@@ -230,8 +218,8 @@ const util = {
             .setDescription(reportEmbed.description)
             .addFields(reportEmbed.fields[0])
             .setFooter(reportEmbed.footer)
-            .setColor('Red')
-    }
+            .setColor('Red');
+    },
 };
 
 module.exports = {
@@ -239,5 +227,5 @@ module.exports = {
     info,
     moderation,
     misc,
-    util
+    util,
 };

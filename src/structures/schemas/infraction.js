@@ -3,25 +3,25 @@ const mongoose = require('mongoose');
 const Infraction = new mongoose.Schema({
     type: {
         type: String,
-        required: true
+        required: true,
     },
     target: {
         type: String,
-        required: true
+        required: true,
     },
     moderator: {
         type: String,
-        required: true
+        required: true,
     },
     reason: {
         type: String,
         required: false,
-        default: 'No reason provided'
+        default: 'No reason provided',
     },
     time: {
         type: String,
         required: true,
-    }
+    },
 });
 
 module.exports = mongoose.model('Infraction', Infraction);

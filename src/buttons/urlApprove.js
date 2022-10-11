@@ -8,7 +8,8 @@ module.exports = {
         const userId = reportEmbed.footer.text.slice(9);
         const member = guild.members.cache.get(userId);
 
-        inter.update({ components: [], embeds: [embeds.reportEditApproved(reportEmbed, user)] })
-            .then(_ => member.send({ content: 'Your filter mistake report was accepted and corrected.', embeds: [embeds.reportApproved(reportEmbed, member.user)] }));
-    }
-}
+        inter
+            .update({ components: [], embeds: [embeds.reportEditApproved(reportEmbed, user)] })
+            .then(() => member.send({ content: 'Your filter mistake report was accepted and corrected.', embeds: [embeds.reportApproved(reportEmbed, member.user)] }));
+    },
+};

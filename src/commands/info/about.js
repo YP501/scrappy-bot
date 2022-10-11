@@ -1,9 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const embeds = require('../../util/static/embeds').info;
 
-const info = new SlashCommandBuilder()
-    .setName('about')
-    .setDescription('Responds with some information about the bot');
+const info = new SlashCommandBuilder().setName('about').setDescription('Responds with some information about the bot');
 
 const execute = (inter) => {
     const { client } = inter;
@@ -12,5 +10,5 @@ const execute = (inter) => {
 
 module.exports = {
     info,
-    execute
+    execute,
 };

@@ -1,12 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
 const embeds = require('../../util/static/embeds').info;
 
-const info = new SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Check bot and API latency');
+const info = new SlashCommandBuilder().setName('ping').setDescription('Check bot and API latency');
 
 const execute = (inter) => {
-    inter.deferReply({ fetchReply: true }).then(resultInter => {
+    inter.deferReply({ fetchReply: true }).then((resultInter) => {
         const ping = resultInter.createdTimestamp - inter.createdTimestamp;
         inter.editReply({ embeds: [embeds.ping(inter.client.ws.ping, ping)] });
     });
@@ -14,5 +12,5 @@ const execute = (inter) => {
 
 module.exports = {
     info,
-    execute
+    execute,
 };

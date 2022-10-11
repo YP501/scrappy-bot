@@ -1,4 +1,4 @@
-function formatTime(unix) {
+const formatTime = (unix) => {
     const hoursUnformatted = unix / 3600000;
     const hours = Math.floor(hoursUnformatted);
     let timeLeft = hoursUnformatted % 1;
@@ -12,7 +12,7 @@ function formatTime(unix) {
     return `${hours}hrs, ${minutes}min, ${seconds}sec`;
 };
 
-function formatBlacklist(regexResult, n) {
+const formatBlacklist = (regexResult, n) => {
     const input = regexResult.input;
     const found = regexResult[0];
     const startIndex = regexResult.index;
@@ -32,7 +32,7 @@ function formatBlacklist(regexResult, n) {
     return firstChars + highlighed + lastChars;
 };
 
-function generateId(length, mixed = false) {
+const generateId = (length, mixed = false) => {
     let result = '';
     let chars = '0123456789';
     const mixedChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -48,5 +48,5 @@ function generateId(length, mixed = false) {
 module.exports = {
     formatTime,
     formatBlacklist,
-    generateId
+    generateId,
 };
