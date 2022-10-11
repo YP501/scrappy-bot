@@ -11,7 +11,7 @@ module.exports = {
         inter.update({ components: [], embeds: [embeds.reportEditDeclined(reportEmbed, user)] }).then(() =>
             member.send({
                 content:
-                    '**Your filter mistake report was declined.**\n\nthis means the filter correctly filtered out your URL and it won\'t be whitelisted.\nList of whitelisted domains: https://pastebin.com/raw/sTeY0f7m',
+                    '**Your filter mistake report was declined.**\n\nthis means the filter correctly filtered out your URL and it will not be whitelisted.\nList of whitelisted domains: https://pastebin.com/raw/sTeY0f7m',
                 embeds: [embeds.reportDeclined(reportEmbed, member.user)],
             })
         );

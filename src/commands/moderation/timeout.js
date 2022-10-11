@@ -36,7 +36,7 @@ const execute = async (inter) => {
     } catch (err) {
         await inter.editReply('Cancelled command');
         await inter.followUp({
-            content: 'An error occured while timing out the user, they might already be muted or I don\'t have the permission to mute them',
+            content: 'An error occured while timing out the user, they might already be muted or I do not have the permission to mute them',
             ephemeral: true,
         });
         return;
@@ -55,7 +55,7 @@ const execute = async (inter) => {
         await targetMember.send({ embeds: [embeds.dm(inter, timeoutReason, formattedTimeoutLength)] });
     } catch (err) {
         console.error(err);
-        await inter.followUp({ content: 'Couldn\'t DM user, they have still been timed out', ephemeral: true });
+        await inter.followUp({ content: 'Was unable to DM user, they have still been timed out', ephemeral: true });
     }
     await guild.channels.cache.get(config.channels.log.timeout).send({ embeds: [embeds.log(targetMember, timeoutReason, inter, formattedTimeoutLength)] });
     await inter.editReply({ embeds: [embeds.response(targetMember, timeoutReason, formattedTimeoutLength)] });
