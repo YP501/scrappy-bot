@@ -3,6 +3,7 @@
   "version": "4.0.0",
   "description": "Custom bot for FrankieFms's server",
   "main": "./src/main.js",
+  "scripts": {},
   "repository": "https://github.com/YP501/scrappy-bot.git",
   "author": "YP501#1629",
   "license": "MIT",
