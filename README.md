@@ -3,6 +3,7 @@
 
 ## Self-hosing
 > Self-hosting is allowed, although it's not recommended since this bot is focused on the FrankieFmsLive server and contains some hardcoded values and is therefor likely to not work on other servers.
+
 > If any of the fields/ values are not filled in or wrong, the bot won't start.
 **Steps on self-hosting:**
 1. Clone the repository with `git clone https://github.com/YP501/scrappy-bot.git` and `cd` into the folder
