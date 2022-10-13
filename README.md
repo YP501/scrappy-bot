@@ -16,7 +16,7 @@ dbAuthDev = "your mongo authentication uri here"
 ```
 4. Tweak the id's and values in `./src/config.json` to match the ones of your server and preference
 5. Run `node main.js`
-6. You're done!
+6. Pray it works
 ## Notes
 - You are allowed to self-host this bot but you are not allowed to impersonate this bot as Frankie's bot.
 - You **MUST** credit the original author of this repository when self-hosting and **CANNOT** claim it as your own.
