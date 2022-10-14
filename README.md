@@ -1,5 +1,6 @@
 # Welcome to scrappy-bot, FrankieFms' Discord bot!
 > Developed and maintained by [@YP501](https://github.com/YP501)
+
 This repository is made open source for the purpose of transparency and people who are interested how this bot works behind the scenes.
 
 ## Self-hosting
