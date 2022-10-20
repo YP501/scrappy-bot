@@ -1,3 +1,5 @@
+const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
+
 const formatTime = (unix) => {
     const hoursUnformatted = unix / 3600000;
     const hours = Math.floor(hoursUnformatted);
@@ -26,10 +28,10 @@ const formatBlacklist = (regexResult, n) => {
     while (!input[afterIndex - 1]) afterIndex--;
 
     const firstChars = input.substring(beforeIndex, startIndex);
-    const highlighed = `[${input.substring(startIndex, endIndex)}]`;
+    const highlighted = `[${input.substring(startIndex, endIndex)}]`;
     const lastChars = input.substring(endIndex, afterIndex);
 
-    return firstChars + highlighed + lastChars;
+    return firstChars + highlighted + lastChars;
 };
 
 const generateId = (length, mixed = false) => {
@@ -45,8 +47,16 @@ const generateId = (length, mixed = false) => {
     return result;
 };
 
+const disablifyButtons = (row) => {
+    const buttons = [];
+    const buttonsJson = row.components;
+    buttonsJson.forEach((button) => buttons.push(ButtonBuilder.from(button).setDisabled(true)));
+    return new ActionRowBuilder().addComponents(buttons);
+};
+
 module.exports = {
     formatTime,
     formatBlacklist,
     generateId,
+    disablifyButtons,
 };

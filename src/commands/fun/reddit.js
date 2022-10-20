@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getPost } = require('random-reddit');
 const { subReddits } = require('../../config.json');
-const embeds = require('../../util/static/embeds').fun;
+const { fun: funEmbeds } = require('../../util/builders/embeds');
 
 const info = new SlashCommandBuilder().setName('reddit').setDescription('Get a random post from some funny subreddits');
 
@@ -13,7 +13,7 @@ const execute = async (inter) => {
         post = await getPost(subReddits);
     }
 
-    inter.editReply({ embeds: [embeds.reddit(post)] });
+    inter.editReply({ embeds: [funEmbeds.reddit(post)] });
 };
 
 module.exports = {

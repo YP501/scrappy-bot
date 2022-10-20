@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const embeds = require('../../util/static/embeds').info;
+const embeds = require('../../util/builders/embeds').info;
 
 const info = new SlashCommandBuilder().setName('ping').setDescription('Check bot and API latency');
 

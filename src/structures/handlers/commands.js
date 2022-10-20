@@ -1,7 +1,7 @@
 const { readdirSync } = require('fs');
 const cmds = [];
 
-function execute(client) {
+const execute = (client) => {
     console.log('Setting command collection...');
     const cmdFolders = readdirSync('./src/commands');
     for (const folder of cmdFolders) {
@@ -13,7 +13,7 @@ function execute(client) {
         }
     }
     console.log('Done\n');
-}
+};
 
 module.exports = {
     execute,

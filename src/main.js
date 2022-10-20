@@ -1,9 +1,10 @@
-const { Client, Collection } = require('discord.js');
+const { Client, Collection, ActivityType } = require('discord.js');
 const { readdirSync } = require('fs');
 const { intents } = require('./config.json');
+const { version } = require('../package.json');
 require('dotenv').config();
 
-const client = new Client({ intents });
+const client = new Client({ intents, presence: { activities: [{ name: `on ${version}`, type: ActivityType.Listening }] } });
 client.commands = new Collection();
 client.buttons = new Collection();
 

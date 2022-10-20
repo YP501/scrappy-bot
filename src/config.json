@@ -1,23 +1,79 @@
 {
     "guildId": "928369763552464997",
-    "intents": ["Guilds", "GuildMessages", "GuildMembers", "MessageContent"],
+
+    "intents": ["Guilds", "GuildMessages", "GuildMembers", "GuildBans", "MessageContent"],
+
+    "cmdCooldown": 2000,
+
+    "emojis": {
+        "check": "<:scrappy_check:1029855559761002506>",
+        "cross": "<:scrappy_cross:1029847563437887620>",
+        "warning": "<:scrappy_warning:1029859720871292942>"
+    },
+
     "channels": {
         "error": "933770206008991805",
         "filterReview": "1002548216941785118",
         "log": {
             "timeout": "1011022661926785125",
             "warn": "1012018634291433582"
+        },
+        "clientEvents": {
+            "guildBan": "1030822046629908490",
+            "guildMember": {
+                "log": "1030824506320764929",
+                "welcome": "934790256190947368"
+            },
+            "message": "1030824621232099378"
         }
     },
+
     "roles": {
-        "warnings": ["1026192331096989837", "1026196095140892792", "1026196098257272954"]
+        "warnings": ["1029735346663071774", "1026192331096989837", "1026196095140892792", "1026196098257272954"],
+        "welcome": ["934797678750093382", "934797713952878673", "934797707904692225"]
     },
-    "cmdCooldown": 2000,
+
     "xpSettings": {
         "xpMultiplier": 1000,
         "minXp": 15,
         "maxXp": 30,
         "chatCooldown": 30000
     },
-    "subReddits": ["ComedyCemetery", "memes", "CrappyDesign", "ihadastroke", "bingbongtheorem", "gocommitdie", "robloxmemes"]
+
+    "subReddits": ["ComedyCemetery", "memes", "CrappyDesign", "ihadastroke", "bingbongtheorem", "gocommitdie", "robloxmemes"],
+
+    "eightBallAnswers": [
+        "It is certain",
+        "It is decidedly so",
+        "Without a doubt",
+        "Yes definitely",
+        "You may rely on it",
+        "As I see it, yes",
+        "Most likely",
+        "Outlook good",
+        "Yes",
+        "Signs point to yes",
+        "Reply hazy, try again",
+        "Ask again later",
+        "Better not tell you now",
+        "Cannot predict now",
+        "Concentrate and ask again",
+        "Best to not count on it",
+        "My reply is no",
+        "My sources say no",
+        "Outlook not so good",
+        "Very doubtful",
+        "Maybe",
+        "Nah",
+        "🤨",
+        "Lmao no",
+        "Of course!",
+        "Yessir",
+        "👍",
+        "😰",
+        "L + ratio + you fell off",
+        "Bruh idk lol",
+        "Imagine needing to ask that to a discord bot with no personallity, go touch some grass man.",
+        "I am going to shank you at this exact point in time with my shiv"
+    ]
 }
