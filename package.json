@@ -4,11 +4,12 @@
   "description": "Custom bot for FrankieFms's server",
   "main": "./src/main.js",
   "scripts": {},
-  "repository": "https://github.com/YP501/scrappy-bot.git",
+  "repository": "https://github.com/YP501/scrappy-bot",
   "author": "YP501#1629",
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "axios": "^1.1.3",
     "cron": "^2.1.0",
     "discord-xp": "^1.1.16",
     "discord.js": "^14.6.0",
