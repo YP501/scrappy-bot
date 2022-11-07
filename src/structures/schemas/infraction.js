@@ -22,6 +22,10 @@ const Infraction = new mongoose.Schema({
         type: String,
         required: true,
     },
+    id: {
+        type: String,
+        required: true,
+    },
 });
 
-module.exports = mongoose.model('Infraction', Infraction);
+module.exports.Infraction = mongoose.model('Infraction', Infraction);

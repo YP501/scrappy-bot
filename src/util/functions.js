@@ -1,5 +1,11 @@
 const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
+/**
+ * Formats the provided unix time code into the uptime of the bot
+ * @param {Number} unix
+ * @returns <x>hrs, <y>min, <z>sec
+ */
+
 const formatTime = (unix) => {
     const hoursUnformatted = unix / 3600000;
     const hours = Math.floor(hoursUnformatted);
@@ -13,6 +19,13 @@ const formatTime = (unix) => {
 
     return `${hours}hrs, ${minutes}min, ${seconds}sec`;
 };
+
+/**
+ * Returns a highlighted string in a text based on the probided regex with n surrounding characters
+ * @param {Object} regexResult
+ * @param {Number} n
+ * @returns String with characters surrounding the regex result
+ */
 
 const formatBlacklist = (regexResult, n) => {
     const input = regexResult.input;
@@ -34,6 +47,12 @@ const formatBlacklist = (regexResult, n) => {
     return firstChars + highlighted + lastChars;
 };
 
+/**
+ * Returns a randomly generated string consisting of numbers of "length" length. If mixed === true, it will include characters, defaults to false
+ * @param {Number} length
+ * @returns String of "length" length
+ */
+
 const generateId = (length, mixed = false) => {
     let result = '';
     let chars = '0123456789';
@@ -46,6 +65,12 @@ const generateId = (length, mixed = false) => {
     }
     return result;
 };
+
+/**
+ * Returns a row with the disabled versions of the provided buttons which are in the row param
+ * @param {Object} row
+ * @returns Row with disabled buttons
+ */
 
 const disablifyButtons = (row) => {
     const buttons = [];

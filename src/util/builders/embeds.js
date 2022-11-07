@@ -76,19 +76,19 @@ const moderation = {
             return new EmbedBuilder()
                 .setTitle('New warning')
                 .setURL(messageUrl)
-                .setDescription(savedWarn.warning)
+                .setDescription(savedWarn.reason)
                 .addFields(
                     { name: 'User', value: `<@${savedWarn.target}>`, inline: true },
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>`, inline: true },
                     { name: 'Date', value: `<t:${savedWarn.time}:f>` }
                 )
-                .setFooter({ text: `Warning ID: ${savedWarn.id} | User ID: ${savedWarn.target}` })
+                .setFooter({ text: `Infraction ID: ${savedWarn.id} | User ID: ${savedWarn.target}` })
                 .setColor('Purple');
         },
         dm: (savedWarn) => {
             return new EmbedBuilder()
                 .setTitle('Warning Information')
-                .setDescription(savedWarn.warning)
+                .setDescription(savedWarn.reason)
                 .addFields(
                     { name: 'Time', value: `<t:${savedWarn.time}:f>` },
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
@@ -109,7 +109,7 @@ const moderation = {
             for (const warn of userWarnings) {
                 embed.addFields({
                     name: `ID: ${warn.id} | Moderator: ${inter.guild.members.cache.get(warn.moderator).user.tag}`,
-                    value: `**Warning:** ${warn.warning}\n<t:${warn.time}:f>`,
+                    value: `**Warning:** ${warn.reason}\n<t:${warn.time}:f>`,
                 });
             }
             return embed;
@@ -117,7 +117,7 @@ const moderation = {
         responseRemove: (savedWarn) => {
             return new EmbedBuilder()
                 .setTitle('Removed Warning')
-                .setDescription(savedWarn.warning)
+                .setDescription(savedWarn.reason)
                 .addFields(
                     { name: 'User', value: `<@${savedWarn.target}>` },
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
@@ -129,7 +129,7 @@ const moderation = {
         responseShow: (savedWarn) => {
             return new EmbedBuilder()
                 .setTitle('Warning Information')
-                .setDescription(savedWarn.warning)
+                .setDescription(savedWarn.reason)
                 .addFields(
                     { name: 'User', value: `<@${savedWarn.target}>` },
                     { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
@@ -172,33 +172,57 @@ const clientEvents = {
         const { user: bannedUser } = guildBan;
         return new EmbedBuilder().setDescription(`🍃 User unbanned: ${bannedUser.tag} (${bannedUser.id})`).setColor('Green');
     },
-    guildMemberAddLog: (member) => {
-        const { user } = member;
-        return new EmbedBuilder()
-            .setDescription(
-                `📥 **User Joined**\n<@${user.id}> | ${user.tag} (${user.id})\n\n**User Created:**\n<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(
-                    user.createdTimestamp / 1000
-                )}:R>)`
-            )
-            .setThumbnail(user.displayAvatarURL())
-            .setColor('Green');
-    },
-    guildMemberAddWelcome: (member) => {
-        const { user, guild } = member;
-        return new EmbedBuilder()
-            .setTitle('New user joined!')
-            .setDescription(`Welcome to __${member.guild.name}__, **${user.tag}**!`)
-            .setThumbnail(user.displayAvatarURL())
-            .setFooter({ text: `Member #${guild.memberCount}` })
-            .setColor('Purple');
+    guildMemberAdd: {
+        log: (member) => {
+            const { user } = member;
+            return new EmbedBuilder()
+                .setDescription(
+                    `📥 **User Joined**\n<@${user.id}> | ${user.tag} (${user.id})\n\n**User Created:**\n<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(
+                        user.createdTimestamp / 1000
+                    )}:R>)`
+                )
+                .setColor('Green');
+        },
+        sendChannel: (member) => {
+            const { user, guild } = member;
+            return new EmbedBuilder()
+                .setTitle('New user joined!')
+                .setDescription(`Welcome to __${member.guild.name}__, **${user.tag}**!`)
+                .setThumbnail(user.displayAvatarURL())
+                .setFooter({ text: `Member #${guild.memberCount}` })
+                .setColor('Purple');
+        },
     },
     guildMemberRemoveLog: (member) => {
         const { user } = member;
         return new EmbedBuilder().setDescription(`📤 **User Left**\n<@${user.id}> | ${user.tag} (${user.id})`).setThumbnail(user.displayAvatarURL()).setColor('Red');
     },
-    guildMemberRemoveWelcome: (member) => {
-        const { user } = member;
-        return new EmbedBuilder().setTitle('User left!').setDescription(`**${user.tag}** got griddied on`).setColor('Red');
+    message: {
+        delete: (msg) => {
+            const { author, content, channel, id: msgId } = msg;
+            return new EmbedBuilder()
+                .setAuthor({ name: author.tag, iconURL: author.displayAvatarURL() })
+                .setDescription(`**Message sent by <@${author.id}> was deleted in <#${channel.id}>**\n${content}`)
+                .setFooter({ text: `User ID: ${author.id} | Message ID: ${msgId}` })
+                .setColor('Red');
+        },
+        edit: (oldMsg, newMsg) => {
+            const { author, content: oldContent, channel, url } = oldMsg;
+            const { content: newContent } = newMsg;
+            return new EmbedBuilder()
+                .setAuthor({ name: author.tag, iconURL: author.displayAvatarURL() })
+                .setDescription(`**Message edited in <#${channel.id}>**\n[Jump to Message](${url})`)
+                .addFields({ name: 'Before', value: oldContent }, { name: 'After', value: newContent })
+                .setFooter({ text: `User ID: ${author.id}` })
+                .setColor('Purple');
+        },
+        bulkDelete: (msgAmount, channel) => {
+            const { guild, id } = channel;
+            return new EmbedBuilder()
+                .setAuthor({ name: guild.name, iconURL: guild.iconURL() })
+                .setDescription(`**Bulk Delete in <#${id}>, ${msgAmount} messages deleted**`)
+                .setFooter({ text: `Channel ID: ${id}` });
+        },
     },
 };
 

@@ -6,6 +6,6 @@ module.exports = {
     once: false,
     execute: (member) => {
         member.guild.channels.cache.get(channels.clientEvents.guildMember.log).send({ embeds: [eventEmbeds.guildMemberRemoveLog(member)] });
-        member.guild.channels.cache.get(channels.clientEvents.guildMember.welcome).send(`**${member.user.tag}** got griddied on 💀`);
+        member.guild.channels.cache.get(channels.clientEvents.guildMember.sendChannel).send(`**${member.user.tag}** got griddied on 💀`);
     },
 };

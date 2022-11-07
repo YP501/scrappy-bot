@@ -12,16 +12,21 @@ const execute = async (inter) => {
     const { user, options } = inter;
 
     // Permission check for eval
-    if (user.id !== '513709333494628355' && user.id !== '365024863548866563') return await inter.reply({ content: 'Only bot devs can use that!', ephemeral: true });
+    if (user.id !== '513709333494628355' && user.id !== '365024863548866563') {
+        await inter.reply({ content: 'Only bot devs can use that!', ephemeral: true });
+        return;
+    }
 
     let output;
     try {
         output = await new Promise((resolve) => resolve(eval(options.getString('code'))));
     } catch (err) {
         try {
-            return await inter.reply(`**ERROR**:\n\`${err}\``);
+            await inter.reply(`**ERROR**:\n\`${err}\``);
+            return;
         } catch {
-            return await inter.followUp(`**ERROR**:\n\`${err}\``);
+            await inter.followUp(`**ERROR**:\n\`${err}\``);
+            return;
         }
     }
 

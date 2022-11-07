@@ -1,18 +1,18 @@
 const { channels } = require('../../config.json');
-const embeds = require('../../util/builders/embeds').misc;
+const { misc: miscEmbeds } = require('../../util/builders/embeds');
 
 module.exports.execute = (client) => {
     process.on('unhandledRejection', (reason) => {
         console.log('[Anti-crash] :: Unhandled Rejection');
         console.log(reason);
         console.log('\n');
-        client.channels.cache.get(channels.error).send({ embeds: [embeds.error('unhandledRejection', reason)] });
+        client.channels.cache.get(channels.error).send({ embeds: [miscEmbeds.error('unhandledRejection', reason)] });
     });
 
     process.on('uncaughtException', (err) => {
         console.log('[Anti-crash] :: Uncaught Exception');
         console.log(err);
         console.log('\n');
-        client.channels.cache.get(channels.error).send({ embeds: [embeds.error('uncaughtException', err)] });
+        client.channels.cache.get(channels.error).send({ embeds: [miscEmbeds.error('uncaughtException', err)] });
     });
 };

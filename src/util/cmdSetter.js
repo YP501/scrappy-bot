@@ -2,13 +2,16 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 
 module.exports = (client, guildId) => {
+    console.log('Uploading commands to guild...');
     try {
-        console.log('Started refreshing application (/) commands...');
+        const cmds = [];
+        client.commands.forEach((cmd) => cmds.push(cmd.info.toJSON()));
+
         const rest = new REST({ version: '10' }).setToken(process.env.tokenDev);
         rest.put(Routes.applicationGuildCommands(client.user.id, guildId), {
-            body: require('../structures/handlers/commands').cmds,
-        }).then(console.log('Successfully reloaded application (/) commands!\n'));
+            body: cmds,
+        }).then(console.log('Done\n'));
     } catch (err) {
-        if (err) console.error(err);
+        console.error(err);
     }
 };

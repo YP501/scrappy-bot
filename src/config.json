@@ -1,8 +1,6 @@
 {
     "guildId": "928369763552464997",
 
-    "intents": ["Guilds", "GuildMessages", "GuildMembers", "GuildBans", "MessageContent"],
-
     "cmdCooldown": 2000,
 
     "emojis": {
@@ -22,7 +20,7 @@
             "guildBan": "1030822046629908490",
             "guildMember": {
                 "log": "1030824506320764929",
-                "welcome": "934790256190947368"
+                "sendChannel": "934790256190947368"
             },
             "message": "1030824621232099378"
         }

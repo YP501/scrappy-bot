@@ -1,10 +1,13 @@
-const { Client, Collection, ActivityType } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, ActivityType } = require('discord.js');
 const { readdirSync } = require('fs');
-const { intents } = require('./config.json');
 const { version } = require('../package.json');
 require('dotenv').config();
 
-const client = new Client({ intents, presence: { activities: [{ name: `on ${version}`, type: ActivityType.Listening }] } });
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.MessageContent],
+    presence: { activities: [{ name: `on ${version}`, type: ActivityType.Playing }] },
+});
+
 client.commands = new Collection();
 client.buttons = new Collection();
 

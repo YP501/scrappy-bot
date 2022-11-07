@@ -3,20 +3,24 @@ const Infraction = require('../../structures/schemas/infraction');
 const { errorEmbed, warningEmbed, successEmbed, moderation: modEmbeds } = require('../../util/builders/embeds');
 const { timeout: timeoutEmbeds } = modEmbeds;
 const config = require('../../config.json');
+const { generateId } = require('../../util/functions');
 const ms = require('ms');
 
 const info = new SlashCommandBuilder()
     .setName('timeout')
     .setDescription('Timeout a member from the server')
     .addUserOption((option) => option.setName('target').setDescription('The user to be timed out').setRequired(true))
-    .addStringOption((option) => option.setName('time').setDescription('10s = 10 seconds, 10m = 10 minutes, 10h = 10 hours, 10d = 10 days').setRequired(true))
+    .addStringOption((option) => option.setName('length').setDescription('10s = 10 seconds, 10m = 10 minutes, 10h = 10 hours, 10d = 10 days').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for timing out this user (not required)'));
 
 const execute = async (inter) => {
     const { options, guild, user: modUser } = inter;
 
-    const timeoutLength = ms(options.getString('time'));
-    if (isNaN(timeoutLength)) return inter.reply({ embeds: [errorEmbed('Time provided was invalid')], ephemeral: true });
+    const timeoutLength = ms(options.getString('length'));
+    if (isNaN(timeoutLength)) {
+        inter.reply({ embeds: [errorEmbed('Time provided was invalid')], ephemeral: true });
+        return;
+    }
     if (timeoutLength < 10000 || timeoutLength > 2419200000) {
         await inter.reply({ embeds: [errorEmbed('Timeout length range is 10 seconds minimum and 28 days maximum!')], ephemeral: true });
         return;
@@ -37,11 +41,12 @@ const execute = async (inter) => {
         return;
     }
     await new Infraction({
-        type: ' timeout',
+        type: 'timeout',
         target: targetUser.id,
         moderator: modUser.id,
         reason: timeoutReason,
         time: Math.floor(new Date().getTime() / 1000),
+        id: generateId(10),
     }).save();
 
     const formattedTimeoutLength = ms(timeoutLength, { long: true });

@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const { misc: miscButtons } = require('../util/builders/components');
 
 module.exports = {
-    id: 'filterreviewdeclined',
+    id: 'filterReview_decline',
     execute: async (inter) => {
         const { message, client, user: modUser } = inter;
         const messageEmbed = message.embeds[0];
