@@ -71,32 +71,36 @@ const moderation = {
                 .setColor('Purple');
         },
     },
-    warn: {
-        log: (savedWarn, messageUrl) => {
+    infraction: {
+        dm: (infraction) => {
+            // Weird formatting to capitalize first letter of warning type for nice looks purposes
+            const typeString = (infraction.type[0] = infraction.type[0].toUpperCase());
             return new EmbedBuilder()
-                .setTitle('New warning')
-                .setURL(messageUrl)
-                .setDescription(savedWarn.reason)
+                .setTitle(`${typeString} information`)
+                .setDescription(infraction.reason)
                 .addFields(
-                    { name: 'User', value: `<@${savedWarn.target}>`, inline: true },
-                    { name: 'Moderator', value: `<@${savedWarn.moderator}>`, inline: true },
-                    { name: 'Date', value: `<t:${savedWarn.time}:f>` }
-                )
-                .setFooter({ text: `Infraction ID: ${savedWarn.id} | User ID: ${savedWarn.target}` })
-                .setColor('Purple');
-        },
-        dm: (savedWarn) => {
-            return new EmbedBuilder()
-                .setTitle('Warning Information')
-                .setDescription(savedWarn.reason)
-                .addFields(
-                    { name: 'Time', value: `<t:${savedWarn.time}:f>` },
-                    { name: 'Moderator', value: `<@${savedWarn.moderator}>` },
+                    { name: 'Time', value: `<@${infraction.target}>`, inline: true },
+                    { name: 'Moderator', value: `<@${infraction.moderator}>`, inline: true },
                     { name: 'Appeal', value: 'To appeal, please join the appeals discord server: `https://discord.gg/vk4KtGGW`' }
                 )
-                .setFooter({ text: `Warning ID: ${savedWarn.id}` })
+                .setFooter({ text: `Infraction ID: ${infraction.id}` })
                 .setColor('Red');
         },
+        log: (infraction, messageUrl) => {
+            return new EmbedBuilder()
+                .setTitle(`New ${infraction.type}`)
+                .setURL(messageUrl)
+                .setDescription(infraction.reason)
+                .addFields(
+                    { name: 'User', value: `<@${infraction.target}>`, inline: true },
+                    { name: 'Moderator', value: `<@${infraction.moderator}>`, inline: true },
+                    { name: 'Date', value: `<t${infraction.time}:f>` }
+                )
+                .setFooter({ text: `Infraction ID: ${infraction.id} | User ID: ${infraction.target}` })
+                .setColor('Purple');
+        },
+    },
+    warn: {
         responseGet: (inter, targetUser, userWarnings) => {
             const embed = new EmbedBuilder()
                 .setAuthor({

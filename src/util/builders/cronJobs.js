@@ -4,7 +4,7 @@ const autoUnban = (guild, userId, time) => {
     const currentTime = new Date().getTime();
     const unbanTime = new Date(currentTime + time);
     const unbanner = new CronJob(unbanTime, () => {
-        guild.memberks.unban(userId, '[ScrappyBot] Ban expired');
+        guild.members.unban(userId, '[ScrappyBot] Ban expired');
         unbanner.stop();
     });
     unbanner.start();

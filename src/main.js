@@ -3,11 +3,13 @@ const { readdirSync } = require('fs');
 const { version } = require('../package.json');
 require('dotenv').config();
 
+// Initiating client
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.MessageContent],
-    presence: { activities: [{ name: `on ${version}`, type: ActivityType.Playing }] },
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildBans, GatewayIntentBits.MessageContent],
+  presence: { activities: [{ name: `on ${version}`, type: ActivityType.Playing }] },
 });
 
+// Creating collections
 client.commands = new Collection();
 client.buttons = new Collection();
 

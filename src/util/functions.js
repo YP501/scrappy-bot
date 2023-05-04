@@ -50,6 +50,7 @@ const formatBlacklist = (regexResult, n) => {
 /**
  * Returns a randomly generated string consisting of numbers of "length" length. If mixed === true, it will include characters, defaults to false
  * @param {Number} length
+ * @param {Booleon} mixed
  * @returns String of "length" length
  */
 

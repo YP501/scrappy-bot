@@ -13,16 +13,6 @@ const misc = {
     },
 };
 
-const moderation = {
-    warnAutoBan: () => {
-        return new ActionRowBuilder.addComponents(
-            new ButtonBuilder().setCustomId('autoBan_yes').setLabel('Yes').setStyle('Success'),
-            new ButtonBuilder().setCustomId('autoBan_no').setLabel('No').setStyle('Danger')
-        );
-    },
-};
-
 module.exports = {
     misc,
-    moderation,
 };
