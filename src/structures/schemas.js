@@ -5,11 +5,11 @@ const infractionSchema = new Schema({
     type: SchemaTypes.String,
     required: true,
   },
-  target: {
+  targetUser_id: {
     type: SchemaTypes.String,
     required: true,
   },
-  moderator: {
+  moderatorUser_id: {
     type: SchemaTypes.String,
     required: true,
   },
@@ -27,6 +27,25 @@ const infractionSchema = new Schema({
     required: true,
   },
 });
-const Infraction = model("Infraction", infractionSchema);
+export const Infraction = model("Infraction", infractionSchema);
 
-export { Infraction };
+const blacklistSchema = new Schema({
+  targetUser_id: {
+    type: SchemaTypes.String,
+    required: true,
+  },
+});
+export const Blacklist = model("Blacklist", blacklistSchema);
+
+const banSchema = new Schema({
+  targetUser_id: {
+    type: SchemaTypes.String,
+    required: true,
+  },
+  unbanTimestamp: {
+    type: SchemaTypes.String,
+    required: true,
+    default: null,
+  },
+});
+export const Ban = model("Ban", banSchema);

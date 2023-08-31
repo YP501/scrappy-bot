@@ -2,7 +2,8 @@ import { EmbedBuilder, codeBlock, ButtonBuilder, ActionRowBuilder } from "discor
 import axios from "axios";
 import { formatUrlMatch } from "../functions/misc.js";
 
-export default async function (msg) {
+export async function filterUrl(msg) {
+  if (msg.author.bot) return;
   const regex = /(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+/;
   const regexResult = regex.exec(msg.content);
 

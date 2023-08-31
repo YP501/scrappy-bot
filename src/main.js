@@ -1,13 +1,15 @@
 // Imports
 import { Client, Collection, GatewayIntentBits, Routes, ActivityType } from "discord.js";
-import { warning } from "./structures/embeds.js";
 import { REST } from "@discordjs/rest";
 import { connect } from "mongoose";
-import urlFilter from "./systems/urlFilter.js";
-import { Infraction } from "./structures/schemas.js";
-import fs from "fs";
 import chalk from "chalk";
-import config from "./config.js";
+import fs from "fs";
+import { warning } from "./structures/embeds.js";
+import { Blacklist } from "./structures/schemas.js";
+import { filterUrl } from "./systems/urlFilter.js";
+import { loadUnbans } from "./systems/autoUnban.js";
+import { initMysteryMerchant } from "./systems/mysteryMerchant.js";
+import { settings, bot } from "./config.js";
 
 const activeToken = process.env.token_dev;
 const rest = new REST({ version: 10 }).setToken(activeToken);
@@ -47,7 +49,7 @@ console.info(chalk.bold.white("-".repeat(115)));
 
   try {
     console.info("[APP-REFR] Started refreshing application (/) commands");
-    await rest.put(Routes.applicationGuildCommands(config.bot["applicationId"], config.bot["guildId"]), { body: slashCommands });
+    await rest.put(Routes.applicationGuildCommands(bot.application_id, bot.guild_id), { body: slashCommands });
     const then = Date.now();
     console.info(`[APP-REFR] Successfully reloaded application (/) commands after ${then - now}ms`);
   } catch (error) {
@@ -75,7 +77,7 @@ console.info(chalk.bold.white("-".repeat(115)));
     console.info(`[DB-INIT] Successfully connected to DataBase after ${then - now}ms`);
 
     console.info("[DB-INIT] Setting up local blacklist");
-    const queryResult = await Infraction.find({ type: "blacklist" });
+    const queryResult = await Blacklist.find();
     queryResult.forEach((entry) => {
       client.blacklist.add(entry.target);
     });
@@ -92,6 +94,12 @@ console.info(chalk.bold.white("-".repeat(115)));
 //////////////////////////////////////////////////////////////////////////
 
 client.once("ready", () => {
+  loadUnbans(client);
+  console.info("[BAN-MANAGE] Removed expired bans and put jobs for the rest");
+
+  initMysteryMerchant(client);
+  console.info("[MM-LOAD] Loaded mystery merchant system");
+
   console.log(chalk.bold.white("-".repeat(115)));
   console.info(`[READY] Logged in as ${client.user.tag} (${client.user.id})`);
   console.info(`[READY] Login at ${new Date()}`);
@@ -109,12 +117,12 @@ client.on("interactionCreate", async (interaction) => {
 
     // Command cooldown
     if (onCooldown.has(interaction.user.id)) {
-      return interaction.reply({ content: `You are on a ${config.settings.commandCooldown / 1000} second cooldown, calm down good sir.`, ephemeral: true });
+      return interaction.reply({ content: `You are on a ${settings.commandCooldown / 1000} second cooldown, calm down good sir.`, ephemeral: true });
     } else {
       onCooldown.add(interaction.user.id);
       setTimeout(() => {
         onCooldown.delete(interaction.user.id);
-      }, config.settings.commandCooldown);
+      }, settings.commandCooldown);
     }
 
     // Command Blacklist
@@ -167,7 +175,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.on("messageCreate", (msg) => {
-  urlFilter(msg);
+  filterUrl(msg);
 });
 
 client.on("error", (error) => {

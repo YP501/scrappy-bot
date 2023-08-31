@@ -11,7 +11,7 @@ async function execute(interaction) {
 
   // Preparing embeds
   const footerUser_id = embed.data.footer.text.slice(9);
-  const footerUser = await interaction.client.users.fetch(footerUser_id, { cache: false });
+  const footerUser = await interaction.client.users.fetch(footerUser_id);
   const embed_edited = EmbedBuilder.from(embed)
     .setAuthor({ name: `Approved by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
     .setColor("Green");

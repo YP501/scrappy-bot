@@ -1,10 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { Infraction } from "../structures/schemas.js";
+import { Infraction, Blacklist } from "../structures/schemas.js";
 import { infraction_log, infraction_dm, success, error, warning } from "../structures/embeds.js";
 import { v4 as uuidv4 } from "uuid";
-import config from "../config.js";
-const settings = config.settings;
+import { settings } from "../config.js";
 
 const name = "blacklist";
 const data = new SlashCommandBuilder()
@@ -33,16 +32,16 @@ async function execute(interaction) {
   switch (interaction.options.getSubcommand()) {
     case "add": {
       // Settings case variables
-      const user = interaction.options.getUser("target");
+      const targetUser = interaction.options.getUser("target");
       const reason = interaction.options.getString("reason") || "No reason provided";
 
       // Checks
-      if (reason?.length > settings.maxReasonLength) {
+      if (reason.length > settings.maxReasonLength) {
         return interaction.editReply({ embeds: [error(`Keep your new reason under ${settings.maxReasonLength} characters`)] });
       }
 
       // Checking if user is already in blacklist
-      const isBlacklisted = interaction.client.blacklist.has(user.id);
+      const isBlacklisted = interaction.client.blacklist.has(targetUser.id);
       if (isBlacklisted) {
         return interaction.editReply({ embeds: [error("That user is already blacklisted")] });
       }
@@ -50,14 +49,15 @@ async function execute(interaction) {
       // Setting database entry and local collection entry
       const infractionData = {
         type: "blacklist",
-        target: user.id,
-        moderator: interaction.user.id,
+        targetUser_id: targetUser.id,
+        moderatorUser_id: interaction.user.id,
         reason: reason,
-        date: Math.floor(new Date().getTime() / 1000),
+        date: Math.floor(Date.now() / 1000),
         id: uuidv4(),
       };
       await new Infraction(infractionData).save();
-      interaction.client.blacklist.add(user.id);
+      await new Blacklist({ targetUser_id: targetUser.id }).save();
+      interaction.client.blacklist.add(targetUser.id);
 
       // Sending
       interaction.editReply({ embeds: [success("Added user to blacklist")] });
@@ -69,7 +69,7 @@ async function execute(interaction) {
       // Sending user a DM
       const appealButton = new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel("Appeal").setURL(settings.appealServerInvite).setStyle(ButtonStyle.Link));
       try {
-        await user.send({
+        await targetUser.send({
           content: "You have received a blacklist",
           embeds: [infraction_dm(infractionData)],
           components: [appealButton],
@@ -81,16 +81,16 @@ async function execute(interaction) {
     }
     case "remove": {
       // Setting case variables
-      const user = interaction.options.getUser("target");
+      const targetUser = interaction.options.getUser("target");
 
       // Checking if user is blacklisted
-      if (!interaction.client.blacklist.has(user.id)) {
+      if (!interaction.client.blacklist.has(targetUser.id)) {
         return interaction.editReply({ embeds: [error("That user is not blacklisted")] });
       }
 
       // Updating local and DB blacklist
-      const { deletedCount } = await Infraction.deleteOne({ target: user.id, type: "blacklist" });
-      interaction.client.blacklist.delete(user.id);
+      const { deletedCount } = await Blacklist.deleteOne({ targetUser_id: targetUser.id });
+      interaction.client.blacklist.delete(targetUser.id);
 
       // Sending
       await interaction.editReply({ embeds: [success("Removed user from blacklist")] });
@@ -104,9 +104,10 @@ async function execute(interaction) {
       interaction.client.blacklist.clear();
 
       // Fetching blacklist from the database and setting it to the local one
-      const queryResult = await Infraction.find({ type: "blacklist" });
+      const queryResult = await Blacklist.find();
+      console.log(queryResult);
       queryResult.forEach((entry) => {
-        interaction.client.blacklist.add(entry.target);
+        interaction.client.blacklist.add(entry.targetUser_id);
       });
 
       // Sending

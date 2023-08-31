@@ -3,8 +3,7 @@ import { SlashCommandBuilder, CommandInteraction, ActionRowBuilder, ButtonBuilde
 import { v4 as uuidv4 } from "uuid";
 import { Infraction } from "../structures/schemas.js";
 import { error, warning, success, infraction_dm, infraction_log } from "../structures/embeds.js";
-import config from "../config.js";
-const settings = config.settings;
+import { settings } from "../config.js";
 
 const name = "warn";
 const data = new SlashCommandBuilder()
@@ -31,10 +30,10 @@ async function execute(interaction) {
 
   const infractionData = {
     type: "warning",
-    target: warningUser.id,
-    moderator: interaction.user.id,
+    targetUser_id: warningUser.id,
+    moderatorUser_id: interaction.user.id,
     reason: warningReason,
-    date: Math.floor(new Date().getTime() / 1000),
+    date: Math.floor(Date.now() / 1000),
     id: uuidv4(),
   };
   await new Infraction(infractionData).save();

@@ -1,9 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder } from "discord.js";
 import { disableButtons } from "../functions/components.js";
-import config from "../config.js";
+import { settings } from "../config.js";
 import { success } from "../structures/embeds.js";
-const settings = config.settings;
 
 /**
  * @param {ButtonInteraction} interaction

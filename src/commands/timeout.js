@@ -4,8 +4,7 @@ import ms from "ms";
 import { v4 as uuidv4 } from "uuid";
 import { Infraction } from "../structures/schemas.js";
 import { success, error, warning } from "../structures/embeds.js";
-import config from "../config.js";
-const settings = config.settings;
+import { settings } from "../config.js";
 
 const name = "timeout";
 const data = new SlashCommandBuilder()
@@ -38,7 +37,7 @@ async function execute(interaction) {
   const timeoutReason = interaction.options.getString("reason") || "No reason provided";
 
   // Step 1: checks
-  if (timeoutReason?.length > settings.maxReasonLength) {
+  if (timeoutReason.length > settings.maxReasonLength) {
     return interaction.editReply({ embeds: [error(`Keep your reason under ${settings.maxReasonLength} characters`)] });
   }
 
@@ -48,7 +47,7 @@ async function execute(interaction) {
 
   // Step 2: Executing timeout
   try {
-    timeoutMember.timeout(timeoutLength, timeoutReason);
+    await timeoutMember.timeout(timeoutLength, timeoutReason);
   } catch (_) {
     return interaction.editReply({ embeds: [error("I don't have the permission to time that user out")] });
   }
@@ -56,10 +55,10 @@ async function execute(interaction) {
 
   const infractionData = {
     type: "timeout",
-    target: timeoutMember.user.id,
-    moderator: interaction.user.id,
+    targetUser_id: timeoutMember.user.id,
+    moderatorUser_id: interaction.user.id,
     reason: timeoutReason,
-    date: Math.floor(new Date().getTime() / 1000),
+    date: Math.floor(Date.now() / 1000),
     id: uuidv4(),
   };
   await new Infraction(infractionData).save();
@@ -71,10 +70,10 @@ async function execute(interaction) {
     .setTitle("New timeout")
     .setDescription(timeoutReason)
     .addFields(
-      { name: "User", value: `<@${infractionData.target}>`, inline: true },
-      { name: "Moderator", value: `<@${infractionData.moderator}>`, inline: true },
+      { name: "User", value: `<@${infractionData.targetUser_id}>`, inline: true },
+      { name: "Moderator", value: `<@${infractionData.moderatorUser_id}>`, inline: true },
       { name: "\u200b", value: "\u200b", inline: true },
-      { name: "Length", value: formattedTimeoutLength },
+      { name: "Length", value: `\`${formattedTimeoutLength}\`` },
       { name: "Date", value: `<t:${infractionData.date}:f>`, inline: true },
       { name: "Infraction ID", value: `\`${infractionData.id}\`` }
     )
@@ -87,9 +86,9 @@ async function execute(interaction) {
     .setTitle("Timeout information")
     .setDescription(infractionData.reason)
     .addFields(
-      { name: "Moderator", value: `<@${infractionData.moderator}>`, inline: true },
+      { name: "Moderator", value: `<@${infractionData.moderatorUser_id}>`, inline: true },
       { name: "Date", value: `<t:${infractionData.date}:f>`, inline: true },
-      { name: "Length", value: formattedTimeoutLength },
+      { name: "Length", value: `\`${formattedTimeoutLength}\`` },
       { name: "Infraction ID", value: `\`${infractionData.id}\`` }
     )
     .setColor("Red");

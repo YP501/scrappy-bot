@@ -2,7 +2,7 @@
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, codeBlock } from "discord.js";
 import { formatMillisecondTime, getNpmPackages } from "../functions/misc.js";
 import os from "os";
-import config from "../config.js";
+import { settings } from "../config.js";
 
 const name = "info";
 const data = new SlashCommandBuilder().setName(name).setDescription("Receive some information about this bot");
@@ -30,7 +30,7 @@ async function execute(interaction) {
         name: "Bot Info",
         value: `
         >>> Uptime: ${formatMillisecondTime(interaction.client.uptime)}
-        Version: ${config.settings.version}
+        Version: ${settings.version}
         Developer: <@513709333494628355>
         `,
         inline: true,

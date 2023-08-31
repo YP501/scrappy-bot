@@ -4,8 +4,7 @@ import { pagination, ButtonTypes, ButtonStyles } from "@devraelfreeze/discordjs-
 import { chunkifyArray } from "../functions/misc.js";
 import { error, success } from "../structures/embeds.js";
 import { Infraction } from "../structures/schemas.js";
-import config from "../config.js";
-const settings = config.settings;
+import { settings } from "../config.js";
 
 const name = "infraction";
 const data = new SlashCommandBuilder()
@@ -81,9 +80,9 @@ async function execute(interaction) {
       // Query the database for infractions for the user
       let infractionQueryResult = null;
       if (type === "all") {
-        infractionQueryResult = await Infraction.find({ target: user.id });
+        infractionQueryResult = await Infraction.find({ targetUser_id: user.id });
       } else {
-        infractionQueryResult = await Infraction.find({ target: user.id, type: type });
+        infractionQueryResult = await Infraction.find({ targetUser_id: user.id, type: type });
       }
 
       // Check if query has any results
@@ -156,8 +155,8 @@ async function execute(interaction) {
         .setTitle("Infraction fetch result")
         .setDescription(queryResult.reason)
         .addFields(
-          { name: "User", value: `<@${queryResult.target}>`, inline: true },
-          { name: "Moderator", value: `<@${queryResult.moderator}>`, inline: true },
+          { name: "User", value: `<@${queryResult.targetUser_id}>`, inline: true },
+          { name: "Moderator", value: `<@${queryResult.moderatorUser_id}>`, inline: true },
           { name: "Date", value: `<t:${queryResult.date}:f>`, inline: true },
           { name: "Type", value: `\`${queryResult.type}\``, inline: true },
           { name: "ID", value: `\`${queryResult.id}\``, inline: true }
@@ -193,9 +192,9 @@ async function execute(interaction) {
       // Query the database for infraction using the ID
       let deletedCount = 0;
       if (type === "all") {
-        deletedCount = (await Infraction.deleteMany({ target: user.id })).deletedCount;
+        deletedCount = (await Infraction.deleteMany({ targetUser_id: user.id })).deletedCount;
       } else {
-        deletedCount = (await Infraction.deleteMany({ target: user.id, type: type })).deletedCount;
+        deletedCount = (await Infraction.deleteMany({ targetUser_id: user.id, type: type })).deletedCount;
       }
 
       // Check if query has any results

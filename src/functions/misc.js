@@ -9,7 +9,7 @@ import { exec } from "child_process";
  * @param {Number} time Amount of milliseconds to be formatted
  * @returns {String} Milliseconds converted into a "HH:MM:SS" format
  */
-function formatMillisecondTime(ms) {
+export function formatMillisecondTime(ms) {
   if (!ms) return new SyntaxError(`The following value is missing:\n> ms: ${ms}`);
 
   const hoursUnformatted = ms / 3600000;
@@ -29,7 +29,7 @@ function formatMillisecondTime(ms) {
  * Get a list of all non-dev npm packages for this project
  * @returns {String} Formatted string with all production NPM packages
  */
-async function getNpmPackages() {
+export async function getNpmPackages() {
   const { stdout } = await promisify(exec)("npm list --depth=0 --prod --json");
   const packageString = Object.entries(JSON.parse(stdout).dependencies)
     .map((dep) => {
@@ -46,7 +46,7 @@ async function getNpmPackages() {
  * @param {Number} size Size of the chunks
  * @returns {Array} New array consisting of smaller arrays of the specified size
  */
-function chunkifyArray(arr, size) {
+export function chunkifyArray(arr, size) {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
 }
 
@@ -57,7 +57,7 @@ function chunkifyArray(arr, size) {
  * @returns String with characters surrounding the regex result
  */
 
-const formatUrlMatch = (regexResult, n) => {
+export function formatUrlMatch(regexResult, n) {
   const input = regexResult.input;
   const found = regexResult[0];
   const startIndex = regexResult.index;
@@ -75,6 +75,4 @@ const formatUrlMatch = (regexResult, n) => {
   const lastChars = input.substring(endIndex, afterIndex);
 
   return firstChars + highlighted + lastChars;
-};
-
-export { formatMillisecondTime, getNpmPackages, chunkifyArray, formatUrlMatch };
+}
