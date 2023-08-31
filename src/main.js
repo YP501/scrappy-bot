@@ -15,7 +15,7 @@ const activeToken = process.env.token_dev;
 const rest = new REST({ version: 10 }).setToken(activeToken);
 
 // Initializing client
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
 client.commands = new Collection();
 client.buttons = new Collection();
 client.blacklist = new Set();
