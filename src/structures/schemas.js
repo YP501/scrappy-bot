@@ -49,3 +49,11 @@ const banSchema = new Schema({
   },
 });
 export const Ban = model("Ban", banSchema);
+
+const whitelistSchema = new Schema({
+  url: {
+    type: SchemaTypes.String,
+    required: true,
+  },
+});
+export const Whitelist = model("Whitelist", whitelistSchema);

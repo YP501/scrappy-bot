@@ -1,11 +1,11 @@
 // Imports
-import { Client, Collection, GatewayIntentBits, Routes, ActivityType } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Routes, ActivityType, EmbedBuilder } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { connect } from "mongoose";
 import chalk from "chalk";
 import fs from "fs";
 import { warning } from "./structures/embeds.js";
-import { Blacklist } from "./structures/schemas.js";
+import { Blacklist, Whitelist } from "./structures/schemas.js";
 import { filterUrl } from "./systems/urlFilter.js";
 import { loadUnbans } from "./systems/autoUnban.js";
 import { initMysteryMerchant } from "./systems/mysteryMerchant.js";
@@ -19,6 +19,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 client.commands = new Collection();
 client.buttons = new Collection();
 client.blacklist = new Set();
+client.whitelistedUrls = new Set();
 export { client, activeToken };
 
 console.info(chalk.bold.white("-".repeat(115)));
@@ -77,11 +78,17 @@ console.info(chalk.bold.white("-".repeat(115)));
     console.info(`[DB-INIT] Successfully connected to DataBase after ${then - now}ms`);
 
     console.info("[DB-INIT] Setting up local blacklist");
-    const queryResult = await Blacklist.find();
+    let queryResult = await Blacklist.find();
     queryResult.forEach((entry) => {
       client.blacklist.add(entry.target);
     });
     console.info("[DB-INIT] Successfully set up local blacklist");
+
+    console.info("[DB-INIT] Setting up local URL whitelist");
+    (await Whitelist.find()).forEach((entry) => {
+      client.whitelistedUrls.add(entry.url);
+    });
+    console.info("[DB-INIT] Successfully set up local url whitelist");
   } catch (error) {
     const then = Date.now();
     console.info(`[DB-INIT] DataBase initializing error after ${then - now}ms`);
@@ -153,7 +160,7 @@ client.on("interactionCreate", async (interaction) => {
   // BUTTON INTERACTION
   else if (interaction.isButton()) {
     const button = client.buttons.get(interaction.customId);
-    if (!button) return interaction.reply({ content: `There is no button linked to ${interaction.customId} in \`client.buttons\``, ephemeral: true });
+    if (!button) return;
     try {
       button.execute(interaction);
     } catch (error) {

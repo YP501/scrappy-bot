@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { ButtonInteraction, EmbedBuilder } from "discord.js";
+import { Whitelist } from "../structures/schemas.js";
 
 /**
  * @param {ButtonInteraction} interaction
@@ -10,6 +11,8 @@ async function execute(interaction) {
   delete embed.data.title;
 
   // Preparing embeds
+  const str = embed.data.fields[0].value;
+  const url = new URL(str.substring(str.indexOf("[") + 1, str.lastIndexOf("]"))).hostname;
   const footerUser_id = embed.data.footer.text.slice(9);
   const footerUser = await interaction.client.users.fetch(footerUser_id);
   const embed_edited = EmbedBuilder.from(embed)
@@ -17,10 +20,13 @@ async function execute(interaction) {
     .setColor("Green");
   const embed_dm = EmbedBuilder.from(embed).setAuthor({ name: footerUser.tag, iconURL: footerUser.displayAvatarURL() }).setTitle("Filter report").setColor("Green");
 
+  // Updating whitelist on DB and locally
+  await new Whitelist({ url: url }).save();
+  interaction.client.whitelistedUrls.add(url);
+
   // Sending
   await footerUser.send({ content: "Your filter mistake report was accepted and the URL has been whitelisted", embeds: [embed_dm] });
   await interaction.update({ components: [], embeds: [embed_edited] });
-  interaction.followUp({ content: "Please DM <@513709333494628355> with the matched URL so he can add it to the whitelist!", ephemeral: true });
 }
 
 export { id, execute };

@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { ButtonInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js";
+import { ButtonInteraction, EmbedBuilder } from "discord.js";
 
 /**
  * @param {ButtonInteraction} interaction
@@ -16,15 +16,10 @@ async function execute(interaction) {
     .setAuthor({ name: `Declined by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
     .setColor("Red");
   const embed_dm = EmbedBuilder.from(embed).setAuthor({ name: footerUser.tag, iconURL: footerUser.displayAvatarURL() }).setTitle("Filter report").setColor("Red");
-
-  const whitelistedButton = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setURL("https://pastebin.com/raw/sTeY0f7m").setLabel("Whitelisted Domains").setStyle("Link")
-  );
   // Sending
   await footerUser.send({
     content: "Your filter mistake report was declined and the URL has not been whitelisted",
     embeds: [embed_dm],
-    components: [whitelistedButton],
   });
   interaction.update({ components: [], embeds: [embed_edited] });
 }

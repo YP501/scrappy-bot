@@ -1,5 +1,4 @@
 import { EmbedBuilder, codeBlock, ButtonBuilder, ActionRowBuilder } from "discord.js";
-import axios from "axios";
 import { formatUrlMatch } from "../functions/misc.js";
 
 export async function filterUrl(msg) {
@@ -9,11 +8,16 @@ export async function filterUrl(msg) {
 
   // If URL is detected
   if (regexResult) {
-    const res = await axios.get("https://pastebin.com/raw/sTeY0f7m");
-    const whitelistedList = res.data.split("\r\n");
-
+    const whitelist = msg.client.whitelistedUrls;
     // Check if detected domain is whitelisted
-    const isWhitelisted = whitelistedList.some((domain) => msg.content.toLowerCase().includes(domain));
+    let isWhitelisted = false;
+    whitelist.forEach((domain) => {
+      if (isWhitelisted) return;
+      if (msg.content.toLowerCase().trim().includes(domain)) {
+        isWhitelisted = true;
+        return;
+      }
+    });
     if (!isWhitelisted) {
       // Execute deletion and notifying user
       await msg.delete();
