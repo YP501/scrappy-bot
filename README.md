@@ -15,7 +15,7 @@ This repository is made open source for the purpose of transparency and for peop
 tokenDev = "your bot token here"
 dbAuthDev = "your mongo authentication uri here"
 ```
-4. Tweak the id's and values in `./src/config.json` to match the ones of your server and preferences
+4. Tweak the id's and values in `./src/config.js` to match the ones of your server and preferences
 5. Run `node main.js`
 6. Pray it works
 
