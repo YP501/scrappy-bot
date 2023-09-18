@@ -29,5 +29,10 @@ export const settings = {
       mysteryMerchant: "934508100025737246",
     },
   },
+  roles: {
+    systems: {
+      verify: "1153341921171886200",
+    },
+  },
   appealServerInvite: "https://discord.gg/88qsZ36YFf",
 };
