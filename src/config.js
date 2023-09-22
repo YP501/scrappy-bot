@@ -23,7 +23,7 @@ export const settings = {
       filter_review: "1002548216941785118",
       ban: "1146410957153763358",
       kick: "1146530750229905480",
-      softban: "1146532488542429354",
+      purge: "928380278274138212",
     },
     systems: {
       mysteryMerchant: "934508100025737246",
