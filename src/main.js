@@ -1,13 +1,14 @@
 // Imports
-import { Client, Collection, GatewayIntentBits, Routes, ActivityType, EmbedBuilder } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Routes, ActivityType } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { connect } from "mongoose";
 import chalk from "chalk";
 import fs from "fs";
-import { warning } from "./structures/embeds.js";
+import { success, warning } from "./structures/embeds.js";
 import { Blacklist, Whitelist } from "./structures/schemas.js";
 import { filterUrl } from "./systems/urlFilter.js";
 import { loadUnbans } from "./systems/autoUnban.js";
+import { startLevelSystem, handleChatXp } from "./systems/levels.js";
 import { initMysteryMerchant } from "./systems/mysteryMerchant.js";
 import { settings, bot } from "./config.js";
 
@@ -40,8 +41,8 @@ console.info(chalk.bold.white("-".repeat(115)));
         console.info(`[FILE-LOAD] Loaded file: ${file}`);
       }
     } catch (error) {
-      console.error(`[FILE-LOAD] Unloaded: ${file}`);
-      console.error(`[FILE-LOAD] ${error}\n${error.stack}`);
+      console.error(chalk.bold.rgb(0, 255, 0).underline(`[FILE-LOAD] Unloaded: ${file}`));
+      console.error(chalk.red(error.stack));
     }
   }
 
@@ -55,8 +56,8 @@ console.info(chalk.bold.white("-".repeat(115)));
     console.info(`[APP-REFR] Successfully reloaded application (/) commands after ${then - now}ms`);
   } catch (error) {
     const then = Date.now();
-    console.info(`[APP-REFR] Failed to reload application (/) commands after ${then - now}ms`);
-    console.error(`[APP-REFR] ${error}`);
+    console.error(chalk.bold.rgb(0, 255, 0).underline(`[APP-REFR] Failed to reload application (/) commands after ${then - now}ms`));
+    console.error(chalk.red(error.stack));
   }
 
   // Button loading
@@ -77,22 +78,23 @@ console.info(chalk.bold.white("-".repeat(115)));
     const then = Date.now();
     console.info(`[DB-INIT] Successfully connected to DataBase after ${then - now}ms`);
 
-    console.info("[DB-INIT] Setting up local blacklist");
+    startLevelSystem(client);
+    console.info("[DB-INIT] Level system started");
+
     let queryResult = await Blacklist.find();
     queryResult.forEach((entry) => {
       client.blacklist.add(entry.target);
     });
     console.info("[DB-INIT] Successfully set up local blacklist");
 
-    console.info("[DB-INIT] Setting up local URL whitelist");
     (await Whitelist.find()).forEach((entry) => {
       client.whitelistedUrls.add(entry.url);
     });
     console.info("[DB-INIT] Successfully set up local url whitelist");
   } catch (error) {
     const then = Date.now();
-    console.info(`[DB-INIT] DataBase initializing error after ${then - now}ms`);
-    console.error(`[DB-INIT] ${error}`);
+    console.error(chalk.bold.rgb(0, 255, 0).underline(`[DB-INIT] DataBase initializing error after ${then - now}ms`));
+    console.error(chalk.red(error.stack));
   }
 
   client.login(activeToken);
@@ -143,7 +145,7 @@ client.on("interactionCreate", async (interaction) => {
       await cmd.execute(interaction);
     } catch (error) {
       console.error(`${chalk.bold.rgb(0, 255, 0).underline(`Command: ${interaction.commandName} @ ${new Date().toString()}`)}`);
-      console.error(`${chalk.red(error.stack)}`);
+      console.error(chalk.red(error.stack));
       if (!interaction.replied && !interaction.deferred) {
         interaction.reply({
           embeds: [warning("An error occurred while executing this command! Please contact <@513709333494628355>")],
@@ -183,6 +185,26 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on("messageCreate", (msg) => {
   filterUrl(msg);
+  handleChatXp(msg);
+});
+
+client.on("levelUp", async (levelEvent) => {
+  const { newLevel, member: levelMember } = levelEvent;
+  const { UserID, GuildID } = levelMember;
+
+  client.guilds.cache.get(GuildID).channels.cache.get(settings.channels.systems.levels).send(`🎉 <@${UserID}> leveled up to level ${newLevel}! 🎉`);
+
+  // Auto role
+  const levelRolePairs = Object.entries(settings.roles.systems.levels);
+  for (const levelRolePair of levelRolePairs) {
+    const levelValue = levelRolePair[0];
+    const roleID = levelRolePair[1];
+    if (levelValue <= newLevel) {
+      client.guilds.cache.get(GuildID).members.cache.get(UserID).roles.add(roleID);
+    } else {
+      break;
+    }
+  }
 });
 
 client.on("error", (error) => {

@@ -1,0 +1,22 @@
+import { DiscordRankup, Randomizer } from "discord-rankup";
+import { settings } from "../config.js";
+const { min_Xp, max_Xp, xpCooldown } = settings;
+
+export async function startLevelSystem(client) {
+  await DiscordRankup.init(process.env.db_dev, client);
+  // TODO: pretty much wait for the package author to accept the pull request which fixes client event emitting
+}
+
+const onCooldown = new Set();
+export function handleChatXp(msg) {
+  if (onCooldown.has(msg.author.id)) return;
+  if (msg.author.bot) return;
+
+  const xpToAdd = Randomizer.randomXP(min_Xp, max_Xp);
+  DiscordRankup.addXP(msg.author.id, msg.guild.id, xpToAdd);
+
+  onCooldown.add(msg.author.id);
+  setTimeout(() => {
+    onCooldown.delete(msg.author.id);
+  }, xpCooldown);
+}
