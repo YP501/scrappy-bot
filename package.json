@@ -17,10 +17,11 @@
   "dependencies": {
     "@devraelfreeze/discordjs-pagination": "^2.7.6",
     "axios": "^1.5.0",
+    "canvacord": "^5.4.10",
     "captcha-canvas": "^3.2.1",
     "chalk": "^5.3.0",
     "cron": "^2.4.3",
-    "discord-xp": "^1.1.16",
+    "discord-rankup": "^1.1.0",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "mongoose": "^7.3.1",
