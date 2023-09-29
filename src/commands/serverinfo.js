@@ -2,7 +2,7 @@
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ChannelType } from "discord.js";
 
 const name = "serverinfo";
-const data = new SlashCommandBuilder().setName(name).setDescription("Get some info on the server");
+const data = new SlashCommandBuilder().setName(name).setDescription("Get some info of the server");
 
 /**
  * @param {CommandInteraction} interaction
