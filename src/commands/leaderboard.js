@@ -6,7 +6,7 @@ import { error } from "../structures/embeds.js";
 const name = "leaderboard";
 const data = new SlashCommandBuilder()
   .setName(name)
-  .setDescription("List your members based on their XP in chunks of 10")
+  .setDescription("List out all members based on their XP in chunks of 10")
   .addIntegerOption((option) => option.setName("page").setDescription("The page to list, defaults to 1 if invalid"));
 
 /**
