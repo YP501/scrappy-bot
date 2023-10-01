@@ -21,7 +21,7 @@ async function execute(interaction) {
   );
 
   // Sending
-  await reviewChannel.send({ embeds: [embed], components: [buttonRow] });
+  await reviewChannel.send({ content: "@here", embeds: [embed], components: [buttonRow] });
   await interaction.update({ components: [disableButtons(interaction.message.components[0])] });
   interaction.followUp({ embeds: [success("Report was sent for review")], ephemeral: true });
 }
