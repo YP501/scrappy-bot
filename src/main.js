@@ -74,9 +74,9 @@ console.info(chalk.bold.white("-".repeat(115)));
   now = Date.now();
   try {
     console.info("[DB-INIT] Connecting to DataBase");
-    await connect(process.env.db_dev);
+    const connection = await connect(process.env.db_dev);
     const then = Date.now();
-    console.info(`[DB-INIT] Successfully connected to DataBase after ${then - now}ms`);
+    console.info(`[DB-INIT] Successfully connected to ${connection.connections[0].name} after ${then - now}ms`);
 
     startLevelSystem(client);
     console.info("[DB-INIT] Level system started");
