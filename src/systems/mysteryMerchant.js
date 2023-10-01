@@ -33,7 +33,7 @@ export async function initMysteryMerchant(client) {
     }
 
     if (shouldPing) {
-      channel.send("<@&909873499357716510>").then((msg) => msg.delete());
+      channel.send(`<@&${settings.roles.systems.mysteryMerchant}>`).then((msg) => msg.delete());
     }
   }
 
@@ -58,7 +58,7 @@ export async function initMysteryMerchant(client) {
     }
 
     if (shouldPing) {
-      channel.send("<@&909873499357716510>").then((msg) => msg.delete());
+      channel.send(`<@&${settings.roles.systems.mysteryMerchant}>`).then((msg) => msg.delete());
     }
   }
 
