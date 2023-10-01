@@ -6,6 +6,8 @@ import { error, success } from "../structures/embeds.js";
 import { Infraction } from "../structures/schemas.js";
 import { settings } from "../config.js";
 
+// TODO: Add ban and kick filter to get
+
 const name = "infraction";
 const data = new SlashCommandBuilder()
   .setName(name)

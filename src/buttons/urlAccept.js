@@ -12,7 +12,12 @@ async function execute(interaction) {
 
   // Preparing embeds
   const str = embed.data.fields[0].value;
-  const url = new URL(str.substring(str.indexOf("[") + 1, str.lastIndexOf("]"))).hostname;
+  let url = null;
+  try {
+    url = new URL(str.substring(str.indexOf("[") + 1, str.lastIndexOf("]"))).hostname;
+  } catch (_) {
+    url = str.substring(str.indexOf("[") + 1, str.lastIndexOf("]"));
+  }
   const footerUser_id = embed.data.footer.text.slice(9);
   const footerUser = await interaction.client.users.fetch(footerUser_id);
   const embed_edited = EmbedBuilder.from(embed)

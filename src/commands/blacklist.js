@@ -112,7 +112,6 @@ async function execute(interaction) {
 
       // Fetching blacklist from the database and setting it to the local one
       const queryResult = await Blacklist.find();
-      console.log(queryResult);
       queryResult.forEach((entry) => {
         interaction.client.blacklist.add(entry.targetUser_id);
       });

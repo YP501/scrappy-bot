@@ -50,6 +50,7 @@ export const settings = {
     systems: {
       verified: "1153341921171886200",
       mysteryMerchant: "954034783766327307",
+      filterBypass: "954034783766327307",
       levels: {
         // You can add as many as you'd like, they just need to follow the format "level<number>: role_id<string>"
         5: "968222586871898162",

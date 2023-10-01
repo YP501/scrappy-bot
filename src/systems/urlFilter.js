@@ -1,8 +1,12 @@
 import { EmbedBuilder, codeBlock, ButtonBuilder, ActionRowBuilder } from "discord.js";
 import { formatUrlMatch } from "../functions/misc.js";
+import { settings } from "../config.js";
 
+// TODO: add filter bypass role
 export async function filterUrl(msg) {
   if (msg.author.bot) return;
+  if (msg.member.roles.cache.has(settings.roles.systems.filterBypass)) return;
+
   const regex = /(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+/;
   const regexResult = regex.exec(msg.content);
 

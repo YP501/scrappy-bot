@@ -2,6 +2,7 @@
 import { SlashCommandBuilder, CommandInteraction } from "discord.js";
 import { DiscordRankup } from "discord-rankup";
 import { success, error } from "../structures/embeds.js";
+import { settings } from "../config.js";
 
 const name = "levels";
 const data = new SlashCommandBuilder()
@@ -47,6 +48,12 @@ const data = new SlashCommandBuilder()
  */
 async function execute(interaction) {
   await interaction.deferReply();
+
+  // Permission check
+  const roleID = settings.roles.permissions.levels;
+  if (!interaction.member.roles.cache.has(roleID)) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  }
 
   const user = interaction.options.getUser("member");
   const amount = interaction.options.getInteger("amount");

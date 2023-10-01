@@ -4,7 +4,7 @@ import { CronJob } from "cron";
 import ms from "ms";
 import { v4 as uuidv4 } from "uuid";
 import { Infraction, Ban } from "../structures/schemas.js";
-import { error, success, warning } from "../structures/embeds.js";
+import { error, success } from "../structures/embeds.js";
 import { settings } from "../config.js";
 
 const name = "ban";
@@ -90,8 +90,8 @@ async function execute(interaction) {
       embeds: [ban_dm],
       components: [appealButton],
     });
-  } catch (err) {
-    interaction.followUp({ embeds: [warning("Unable to DM user, they have still been banned")], ephemeral: true });
+  } catch (_) {
+    // Do nothing
   }
 
   // Executing ban

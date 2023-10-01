@@ -2,7 +2,7 @@
 import { SlashCommandBuilder, CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { v4 as uuidv4 } from "uuid";
 import { Infraction } from "../structures/schemas.js";
-import { error, warning, success, infraction_dm, infraction_log } from "../structures/embeds.js";
+import { error, success, infraction_dm, infraction_log } from "../structures/embeds.js";
 import { settings } from "../config.js";
 
 const name = "kick";
@@ -55,8 +55,8 @@ async function execute(interaction) {
       embeds: [infraction_dm(infractionData)],
       components: [appealButton],
     });
-  } catch (err) {
-    interaction.followUp({ embeds: [warning("Unable to DM user, they have still been kicked")], ephemeral: true });
+  } catch (_) {
+    // Do nothing
   }
 
   // Executing ban
