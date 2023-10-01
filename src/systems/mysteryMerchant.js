@@ -3,8 +3,8 @@ import { CronJob } from "cron";
 import { settings, bot } from "../config.js";
 
 export async function initMysteryMerchant(client) {
-  const arriveJob = new CronJob("0 8,20 * * *", null, null, true, "Europe/Amsterdam");
-  const leaveJob = new CronJob("10 8,20 * * *", null, null, true, "Europe/Amsterdam");
+  const arriveJob = new CronJob("0 8,20 * * *", arriveManager, null, true, "Europe/Amsterdam");
+  const leaveJob = new CronJob("10 8,20 * * *", leaveManager, null, true, "Europe/Amsterdam");
 
   // Checking embed msg
   const channel = client.channels.cache.get(settings.channels.systems.mysteryMerchant);
@@ -69,7 +69,4 @@ export async function initMysteryMerchant(client) {
     await leaveManager();
   }
   shouldPing = true;
-
-  arriveJob.addCallback(arriveManager);
-  leaveJob.addCallback(leaveManager);
 }
