@@ -17,6 +17,13 @@ const data = new SlashCommandBuilder()
  */
 async function execute(interaction) {
   await interaction.deferReply();
+
+  // Permission check
+  const roleID = settings.roles.permissions.warn;
+  if (!interaction.member.roles.cache.has(roleID)) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  }
+
   const warningUser = interaction.options.getUser("target");
   const warningReason = interaction.options.getString("warning");
 

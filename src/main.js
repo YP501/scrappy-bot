@@ -4,7 +4,7 @@ import { REST } from "@discordjs/rest";
 import { connect } from "mongoose";
 import chalk from "chalk";
 import fs from "fs";
-import { success, warning } from "./structures/embeds.js";
+import { warning } from "./structures/embeds.js";
 import { Blacklist, Whitelist } from "./structures/schemas.js";
 import { filterUrl } from "./systems/urlFilter.js";
 import { loadUnbans } from "./systems/autoUnban.js";

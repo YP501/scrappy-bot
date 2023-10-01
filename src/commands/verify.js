@@ -26,6 +26,9 @@ const inSession = new Set();
  */
 async function execute(interaction) {
   await interaction.deferReply({ ephemeral: true });
+  if (interaction.channel.id !== settings.channels.systems.verify) {
+    return interaction.editReply({ embeds: [warning(`You can only run this command in <#${settings.channels.systems.verify}>`)] });
+  }
   const role = interaction.member.roles.cache.get("1153341921171886200");
   if (role) {
     return interaction.editReply({ embeds: [warning("You are already verified")] });
@@ -98,7 +101,7 @@ async function execute(interaction) {
           }
         } else {
           modalInteraction.editReply({ embeds: [success("You have been verified!")] });
-          interaction.member.roles.add(settings.roles.systems.verify);
+          interaction.member.roles.add(settings.roles.systems.verified);
           buttonCollector.stop();
         }
         break;

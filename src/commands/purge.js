@@ -33,6 +33,13 @@ const data = new SlashCommandBuilder()
  */
 async function execute(interaction) {
   await interaction.deferReply({ ephemeral: true });
+
+  // Permission check
+  const roleID = settings.roles.permissions.purge;
+  if (!interaction.member.roles.cache.has(roleID)) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  }
+
   const amount = interaction.options.getInteger("amount");
   if (amount > 100) {
     return interaction.editReply({ embeds: [error("You can't delete more than 100 messages at a time")] });

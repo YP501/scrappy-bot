@@ -32,6 +32,13 @@ const data = new SlashCommandBuilder()
  */
 async function execute(interaction) {
   await interaction.deferReply();
+
+  // Permission check
+  const roleID = settings.roles.permissions.timeout;
+  if (!interaction.member.roles.cache.has(roleID)) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  }
+
   const timeoutMember = interaction.options.getMember("target");
   const timeoutLength = ms(interaction.options.getString("length"));
   const timeoutReason = interaction.options.getString("reason") || "No reason provided";

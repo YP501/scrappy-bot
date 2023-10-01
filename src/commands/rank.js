@@ -18,24 +18,25 @@ async function execute(interaction) {
   await interaction.deferReply();
 
   const user = interaction.options.getUser("member") || interaction.user;
-  const levelData = await DiscordRankup.fetch(user.id, interaction.guild.id);
-  if (!levelData) {
+  const cardData = await DiscordRankup.getCardData(user.id, interaction.guild.id);
+  if (!cardData) {
     return interaction.editReply({ embeds: [error("No level entry found for that user!")] });
   }
   const levelRank = await DiscordRankup.getRank(user.id, interaction.guild.id);
+  const backgroundImgBuffer = readFileSync("./src/assets/leverCard_default.png");
   const rankCard = new Canvacord.Rank()
     .renderEmojis(true)
     .setAvatar(user.displayAvatarURL({ dynamic: false }))
-    .setBackground("IMAGE", readFileSync("./src/assets/leverCard_default.png"))
-    .setCurrentXP(levelData.XP)
+    .setBackground("IMAGE", backgroundImgBuffer)
+    .setCurrentXP(cardData.currentXP)
     .setCustomStatusColor("#ffffff")
-    .setLevel(levelData.Level)
-    .setMinXP(DiscordRankup.requiredXP(levelData.Level))
+    .setLevel(cardData.level)
+    .setMinXP(DiscordRankup.requiredXP(cardData.level))
     .setOverlay("#000000", 0.5, false)
-    .setProgressBar(["#616AE5", "#5C0B6D"], "GRADIENT", false)
-    .setProgressBarTrack("#FFFFFF")
+    .setProgressBar("#ffffff", "COLOR", true)
+    .setProgressBarTrack("#2e2e2e")
     .setRank(levelRank)
-    .setRequiredXP(DiscordRankup.requiredXP(levelData.Level + 1))
+    .setRequiredXP(cardData.requiredXP)
     .setUsername(user.tag);
 
   const rankCardBuffer = await rankCard.build();

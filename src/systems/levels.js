@@ -4,7 +4,6 @@ const { min_Xp, max_Xp, xpCooldown } = settings;
 
 export async function startLevelSystem(client) {
   await DiscordRankup.init(process.env.db_dev, client);
-  // TODO: pretty much wait for the package author to accept the pull request which fixes client event emitting
 }
 
 const onCooldown = new Set();

@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const bot = {
-  application_id: "889157854966198313",
   guild_id: "928369763552464997",
+  application_id: "889157854966198313",
   version: "v4.0.0",
 };
 
@@ -20,22 +20,35 @@ export const settings = {
   },
   channels: {
     logging: {
-      timeout: "1011022661926785125",
-      warn: "1012018634291433582",
+      ban: "1146410957153763358",
       blacklist: "1145304966131621988",
       filter_review: "1002548216941785118",
-      ban: "1146410957153763358",
       kick: "1146530750229905480",
+      lock: "1158111972139745412", // same for unlock
       purge: "928380278274138212",
+      timeout: "1011022661926785125",
+      warn: "1012018634291433582",
     },
     systems: {
       mysteryMerchant: "934508100025737246",
+      verify: "1001595866295058573",
       levels: "1157035021065007195",
     },
   },
   roles: {
+    permissions: {
+      ban: "954034783766327307",
+      blacklist: "954034783766327307",
+      infraction: "954034783766327307",
+      kick: "954034783766327307",
+      levels: "954034783766327307",
+      lock: "954034783766327307", // same for unlock
+      purge: "954034783766327307",
+      timeout: "954034783766327307",
+      warn: "954034783766327307",
+    },
     systems: {
-      verify: "1153341921171886200",
+      verified: "1153341921171886200",
       levels: {
         // You can add as many as you'd like, they just need to follow the format "level<number>: role_id<string>"
         5: "968222586871898162",

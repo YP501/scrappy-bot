@@ -18,6 +18,12 @@ const data = new SlashCommandBuilder()
 async function execute(interaction) {
   await interaction.deferReply();
 
+  // Permission check
+  const roleID = settings.roles.permissions.kick;
+  if (!interaction.member.roles.cache.has(roleID)) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  }
+
   // Getting option variables
   const targetMember = interaction.options.getMember("target");
   const reason = interaction.options.getString("reason") || "No reason provided";

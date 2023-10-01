@@ -8,7 +8,7 @@ const data = new SlashCommandBuilder().setName(name).setDescription("Small lil' 
  * @param {CommandInteraction} interaction
  */
 async function execute(interaction) {
-  interaction.reply("test success 😎");
+  interaction.reply({ content: "test success 😎", ephemeral: true });
 }
 
 export { name, data, execute };

@@ -71,6 +71,13 @@ const data = new SlashCommandBuilder()
  */
 async function execute(interaction) {
   await interaction.deferReply();
+
+  // Permission check
+  const roleID = settings.roles.permissions.infraction;
+  if (!interaction.member.roles.cache.has(roleID)) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  }
+
   switch (interaction.options.getSubcommand()) {
     case "get": {
       // Initialize case variables
