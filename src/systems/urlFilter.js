@@ -1,5 +1,5 @@
 import { EmbedBuilder, codeBlock, ButtonBuilder, ActionRowBuilder } from "discord.js";
-import { formatUrlMatch } from "../functions/misc.js";
+import { formatUrlMatch, getHostnameFromUrl } from "../functions/misc.js";
 import { settings } from "../config.js";
 
 // TODO: add filter bypass role
@@ -12,38 +12,31 @@ export async function filterUrl(msg) {
 
   // If URL is detected
   if (regexResult) {
-    const whitelist = msg.client.whitelistedUrls;
     // Check if detected domain is whitelisted
-    let isWhitelisted = false;
-    whitelist.forEach((domain) => {
-      if (isWhitelisted) return;
-      if (msg.content.toLowerCase().trim().includes(domain)) {
-        isWhitelisted = true;
-        return;
-      }
-    });
-    if (!isWhitelisted) {
-      // Execute deletion and notifying user
-      await msg.delete();
+    const url = getHostnameFromUrl(regexResult[0]);
+    const isWhitelisted = msg.client.whitelistedUrls.has(url);
+    if (isWhitelisted) return;
 
-      // Build embed and buttons for sending
-      const embed = new EmbedBuilder()
-        .setTitle("URL Match Found")
-        .setDescription(codeBlock(regexResult.input))
-        .addFields({ name: "Matched URL", value: codeBlock("css", formatUrlMatch(regexResult, 10)) })
-        .setFooter({ text: "Click the button below if you believe this is a false positive" })
-        .setColor("Red");
+    // Execute deletion and notifying user
+    await msg.delete();
 
-      const button = new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId("urlmistake").setLabel("Mistake").setStyle("Danger"));
+    // Build embed and buttons for sending
+    const embed = new EmbedBuilder()
+      .setTitle("URL Match Found")
+      .setDescription(codeBlock(regexResult.input))
+      .addFields({ name: "Matched URL", value: codeBlock("css", formatUrlMatch(regexResult, 10)) })
+      .setFooter({ text: "Click the button below if you believe this is a false positive" })
+      .setColor("Red");
 
-      try {
-        await msg.member.send({ embeds: [embed], components: [button] });
-      } catch (_) {
-        const replyMsg = await msg.channel.send(`<@${msg.author.id}> that URL is not whitelisted`);
-        setTimeout(() => {
-          replyMsg.delete();
-        }, 3000);
-      }
+    const button = new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId("urlmistake").setLabel("Mistake").setStyle("Danger"));
+
+    try {
+      await msg.member.send({ embeds: [embed], components: [button] });
+    } catch (_) {
+      const replyMsg = await msg.channel.send(`<@${msg.author.id}> that URL is not whitelisted`);
+      setTimeout(() => {
+        replyMsg.delete();
+      }, 3000);
     }
   }
 }

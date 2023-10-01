@@ -76,3 +76,21 @@ export function formatUrlMatch(regexResult, n) {
 
   return firstChars + highlighted + lastChars;
 }
+
+/**
+ *
+ * @param {String} url
+ * @returns {String} The hostname of the provided URL
+ */
+export function getHostnameFromUrl(url) {
+  // If the URL doesn't contain a protocol, add 'http://' to make it a valid URL.
+  if (!url.includes("://")) {
+    url = "http://" + url;
+  }
+
+  // Create a URL object.
+  const parsedUrl = new URL(url);
+
+  // Extract and return the hostname.
+  return parsedUrl.hostname;
+}
