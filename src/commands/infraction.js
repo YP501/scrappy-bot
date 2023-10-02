@@ -6,8 +6,6 @@ import { error, success } from "../structures/embeds.js";
 import { Infraction } from "../structures/schemas.js";
 import { settings } from "../config.js";
 
-// TODO: Add ban and kick filter to get
-
 const name = "infraction";
 const data = new SlashCommandBuilder()
   .setName(name)
@@ -23,9 +21,11 @@ const data = new SlashCommandBuilder()
           .setDescription("The type of infractions you want to get")
           .addChoices(
             { name: "All", value: "all" },
-            { name: "Timeout", value: "timeout" },
-            { name: "Warning", value: "warning" },
-            { name: "Blacklist", value: "blacklist" }
+            { name: "Bans", value: "ban" },
+            { name: "Blacklists", value: "blacklist" },
+            { name: "Kicks", value: "kick" },
+            { name: "Timeouts", value: "timeout" },
+            { name: "Warnings", value: "warning" }
           )
           .setRequired(true)
       )
@@ -53,9 +53,11 @@ const data = new SlashCommandBuilder()
           .setDescription("The type of infractions you want to remove")
           .addChoices(
             { name: "All", value: "all" },
-            { name: "Timeout", value: "timeout" },
-            { name: "Warning", value: "warning" },
-            { name: "Blacklist", value: "blacklist" }
+            { name: "Bans", value: "ban" },
+            { name: "Blacklists", value: "blacklist" },
+            { name: "Kicks", value: "kick" },
+            { name: "Timeouts", value: "timeout" },
+            { name: "Warnings", value: "warning" }
           )
           .setRequired(true)
       )
