@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { SlashCommandBuilder, CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { Infraction, Blacklist } from "../structures/schemas.js";
 import { infraction_log, infraction_dm, success, error, warning } from "../structures/embeds.js";
 import { v4 as uuidv4 } from "uuid";
@@ -14,7 +14,7 @@ const data = new SlashCommandBuilder()
       .setName("add")
       .setDescription("Add a user to the blacklist")
       .addUserOption((option) => option.setName("target").setDescription("The user to add to the blacklist").setRequired(true))
-      .addStringOption((option) => option.setName("reason").setDescription("The reason you are blacklisting the user"))
+      .addStringOption((option) => option.setName("reason").setDescription("The reason you are blacklisting the user").setMaxLength(settings.maxReasonLength))
   )
   .addSubcommand((cmd) =>
     cmd
@@ -41,11 +41,6 @@ async function execute(interaction) {
       // Settings case variables
       const targetUser = interaction.options.getUser("target");
       const reason = interaction.options.getString("reason") || "No reason provided";
-
-      // Checks
-      if (reason.length > settings.maxReasonLength) {
-        return interaction.editReply({ embeds: [error(`Keep your new reason under ${settings.maxReasonLength} characters`)] });
-      }
 
       // Checking if user is already in blacklist
       const isBlacklisted = interaction.client.blacklist.has(targetUser.id);

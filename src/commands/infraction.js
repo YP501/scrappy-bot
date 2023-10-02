@@ -67,7 +67,9 @@ const data = new SlashCommandBuilder()
       .setName("edit")
       .setDescription("Edit the reason of an infraction on the database")
       .addStringOption((option) => option.setName("infraction_id").setDescription("The ID of the infraction you want to edit the reason for").setRequired(true))
-      .addStringOption((option) => option.setName("new_reason").setDescription("The new reason for the infraction").setRequired(true))
+      .addStringOption((option) =>
+        option.setName("new_reason").setDescription("The new reason for the infraction").setRequired(true).setMaxLength(settings.maxReasonLength)
+      )
   );
 
 /**
@@ -221,11 +223,6 @@ async function execute(interaction) {
       // Initialize case variables
       const infraction_id = interaction.options.getString("infraction_id");
       const newReason = interaction.options.getString("new_reason");
-
-      // Checks
-      if (newReason.length > settings.maxReasonLength) {
-        return interaction.editReply({ embeds: [error(`Keep your new reason under ${settings.maxReasonLength} characters`)] });
-      }
 
       // Query the database for infraction using the ID and trying to update the reason with the newReason
       const { matchedCount } = await Infraction.updateOne({ id: infraction_id }, { reason: newReason });

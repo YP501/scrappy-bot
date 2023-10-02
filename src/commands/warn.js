@@ -10,7 +10,9 @@ const data = new SlashCommandBuilder()
   .setName(name)
   .setDescription("Warns a user")
   .addUserOption((option) => option.setName("target").setDescription("The user you want to warn").setRequired(true))
-  .addStringOption((option) => option.setName("warning").setDescription("The warning you are giving to the user").setRequired(true));
+  .addStringOption((option) =>
+    option.setName("warning").setDescription("The warning you are giving to the user").setRequired(true).setMaxLength(settings.maxReasonLength)
+  );
 
 /**
  * @param {CommandInteraction} interaction
@@ -27,12 +29,7 @@ async function execute(interaction) {
   const warningUser = interaction.options.getUser("target");
   const warningReason = interaction.options.getString("warning");
 
-  // Step 1: checks
-  if (warningReason.length > settings.maxReasonLength) {
-    return interaction.editReply({ embeds: [error(`Keep your reason under ${settings.maxReasonLength} characters`)] });
-  }
-
-  // Step 2: executing warn
+  // Step 1: executing warn
   interaction.editReply({ embeds: [success(`<@${warningUser.id}> has been warned: *${warningReason}*`)] });
 
   const infractionData = {
@@ -45,11 +42,11 @@ async function execute(interaction) {
   };
   await new Infraction(infractionData).save();
 
-  // Step 3: logging warn
+  // Step 2: logging warn
   const logChannel = interaction.guild.channels.cache.get(settings.channels.logging.warn);
   logChannel.send({ embeds: [infraction_log(infractionData)] });
 
-  // Step 4: sending warned user a DM
+  // Step 3: sending warned user a DM
   const appealButton = new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel("Appeal").setURL(settings.appealServerInvite).setStyle(ButtonStyle.Link));
   try {
     await warningUser.send({

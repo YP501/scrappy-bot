@@ -10,7 +10,7 @@ const data = new SlashCommandBuilder()
   .setName(name)
   .setDescription("Kick a user from the server")
   .addUserOption((option) => option.setName("target").setDescription("The user you want to kick").setRequired(true))
-  .addStringOption((option) => option.setName("reason").setDescription("The reason you are kicking this user"));
+  .addStringOption((option) => option.setName("reason").setDescription("The reason you are kicking this user").setMaxLength(settings.maxReasonLength));
 
 /**
  * @param {CommandInteraction} interaction
@@ -31,9 +31,6 @@ async function execute(interaction) {
   // Variable checks
   if (!targetMember.kickable) {
     return interaction.editReply({ embeds: [error("I don't have permission to kick that user")] });
-  }
-  if (reason.length > settings.maxReasonLength) {
-    return interaction.editReply({ embeds: [error(`Keep your reason under ${settings.maxReasonLength} characters`)] });
   }
 
   // Initializing infractionData early for DM

@@ -29,7 +29,7 @@ const data = new SlashCommandBuilder()
   .addBooleanOption((option) =>
     option.setName("delete_messages").setDescription("Whether the messages the user sent in the last 7 days should be deleted or no").setRequired(true)
   )
-  .addStringOption((option) => option.setName("reason").setDescription("The reason you are banning the user"));
+  .addStringOption((option) => option.setName("reason").setDescription("The reason you are banning the user").setMaxLength(settings.maxReasonLength));
 
 /**
  * @param {CommandInteraction} interaction
@@ -53,9 +53,6 @@ async function execute(interaction) {
   // Variable checks
   if (!targetMember.bannable) {
     return interaction.editReply({ embeds: [error("I don't have permission to ban that user")] });
-  }
-  if (reason.length > settings.maxReasonLength) {
-    return interaction.editReply({ embeds: [error(`Keep your reason under ${settings.maxReasonLength} characters`)] });
   }
 
   // Initializing infractionData early for DM

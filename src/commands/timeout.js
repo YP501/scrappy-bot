@@ -25,7 +25,7 @@ const data = new SlashCommandBuilder()
       )
       .setRequired(true)
   )
-  .addStringOption((option) => option.setName("reason").setDescription("Why the user should be timed out"));
+  .addStringOption((option) => option.setName("reason").setDescription("Why the user should be timed out").setMaxLength(settings.maxReasonLength));
 
 /**
  * @param {CommandInteraction} interaction
@@ -43,16 +43,11 @@ async function execute(interaction) {
   const timeoutLength = ms(interaction.options.getString("length"));
   const timeoutReason = interaction.options.getString("reason") || "No reason provided";
 
-  // Step 1: checks
-  if (timeoutReason.length > settings.maxReasonLength) {
-    return interaction.editReply({ embeds: [error(`Keep your reason under ${settings.maxReasonLength} characters`)] });
-  }
-
   if (timeoutMember.isCommunicationDisabled()) {
     return interaction.editReply({ embeds: [error("User is already timed out")] });
   }
 
-  // Step 2: Executing timeout
+  // Step 1: Executing timeout
   try {
     await timeoutMember.timeout(timeoutLength, timeoutReason);
   } catch (_) {
@@ -70,7 +65,7 @@ async function execute(interaction) {
   };
   await new Infraction(infractionData).save();
 
-  // Step 3: Logging timeout
+  // Step 2: Logging timeout
   const logChannel = interaction.guild.channels.cache.get(settings.channels.logging.timeout);
   const formattedTimeoutLength = ms(timeoutLength, { long: true });
   const timeout_log = new EmbedBuilder()
@@ -87,7 +82,7 @@ async function execute(interaction) {
     .setColor("Purple");
   logChannel.send({ embeds: [timeout_log] });
 
-  // Step 4: Sending timed out user a DM
+  // Step 3: Sending timed out user a DM
   const appealButton = new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel("Appeal").setURL(settings.appealServerInvite).setStyle(ButtonStyle.Link));
   const timeout_dm = new EmbedBuilder()
     .setTitle("Timeout information")
