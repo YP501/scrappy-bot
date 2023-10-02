@@ -124,6 +124,8 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.isCommand()) {
     if (!client.commands.has(interaction.commandName)) return;
 
+    // TODO: Only let /verify run in #verify and no other command
+
     // Command cooldown
     if (onCooldown.has(interaction.user.id)) {
       return interaction.reply({ content: `You are on a ${settings.commandCooldown / 1000} second cooldown, calm down good sir.`, ephemeral: true });
@@ -194,15 +196,28 @@ client.on("levelUp", async (levelEvent) => {
 
   client.guilds.cache.get(GuildID).channels.cache.get(settings.channels.systems.levels).send(`🎉 <@${UserID}> leveled up to level ${newLevel}! 🎉`);
 
-  // Auto role
+  // Add level roles on level up
   const levelRolePairs = Object.entries(settings.roles.systems.levels);
   for (const levelRolePair of levelRolePairs) {
     const levelValue = levelRolePair[0];
     const roleID = levelRolePair[1];
     if (levelValue <= newLevel) {
-      client.guilds.cache.get(GuildID).members.cache.get(UserID).roles.add(roleID);
-    } else {
-      break;
+      (await client.guilds.cache.get(GuildID).members.fetch(UserID)).roles.add(roleID);
+    }
+  }
+});
+
+client.on("levelDown", async (levelEvent) => {
+  const { newLevel, member: levelMember } = levelEvent;
+  const { UserID, GuildID } = levelMember;
+
+  // Remove level roles on level down
+  const levelRolePairs = Object.entries(settings.roles.systems.levels);
+  for (const levelRolePair of levelRolePairs) {
+    const levelValue = levelRolePair[0];
+    const roleID = levelRolePair[1];
+    if (levelValue > newLevel) {
+      (await client.guilds.cache.get(GuildID).members.fetch(UserID)).roles.remove(roleID);
     }
   }
 });

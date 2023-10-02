@@ -76,13 +76,14 @@ async function execute(interaction) {
         return interaction.editReply({ embeds: [error("XP amount has to be a positive number")] });
       }
 
-      const newXP = await DiscordRankup.removeXP(user.id, interaction.guild.id, amount, false);
+      const newXP = await DiscordRankup.removeXP(user.id, interaction.guild.id, amount, true);
       interaction.editReply({ embeds: [success(`Removed \`${amount}\` XP from <@${user.id}> | New total XP: \`${newXP}\``)] });
       break;
     }
 
     case "reset": {
-      const newXP = await DiscordRankup.resetXP(user.id, interaction.guild.id);
+      const newXP = await DiscordRankup.setXP(user.id, interaction.guild.id, 0, true);
+
       interaction.editReply({ embeds: [success(`Reset XP amount for <@${user.id}> | New total XP: \`${newXP}\``)] });
       break;
     }
