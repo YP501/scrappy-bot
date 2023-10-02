@@ -1,9 +1,10 @@
 import { DiscordRankup, Randomizer } from "discord-rankup";
 import { settings } from "../config.js";
+import { env } from "../config.js";
 const { min_Xp, max_Xp, xpCooldown } = settings;
 
 export async function startLevelSystem(client) {
-  await DiscordRankup.init(process.env.db_dev, client);
+  await DiscordRankup.init(env.getMongoUri(), client);
 }
 
 const onCooldown = new Set();

@@ -1,6 +1,16 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+export const env = {
+  environment: "dev",
+  getToken: function () {
+    return this.environment === "main" ? process.env.token_main : process.env.token_dev;
+  },
+  getMongoUri: function () {
+    return this.environment === "main" ? process.env.db_main : process.env.db_dev;
+  },
+};
+
 export const bot = {
   guild_id: "928369763552464997",
   application_id: "889157854966198313",

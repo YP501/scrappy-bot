@@ -10,10 +10,9 @@ import { filterUrl } from "./systems/urlFilter.js";
 import { loadUnbans } from "./systems/autoUnban.js";
 import { startLevelSystem, handleChatXp } from "./systems/levels.js";
 import { initMysteryMerchant } from "./systems/mysteryMerchant.js";
-import { settings, bot } from "./config.js";
+import { settings, bot, env } from "./config.js";
 
-const activeToken = process.env.token_dev;
-const rest = new REST({ version: 10 }).setToken(activeToken);
+const rest = new REST({ version: 10 }).setToken(env.getToken());
 
 // Initializing client
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
@@ -21,7 +20,7 @@ client.commands = new Collection();
 client.buttons = new Collection();
 client.blacklist = new Set();
 client.whitelistedUrls = new Set();
-export { client, activeToken };
+export { client };
 
 console.info(chalk.bold.white("-".repeat(115)));
 
@@ -74,7 +73,7 @@ console.info(chalk.bold.white("-".repeat(115)));
   now = Date.now();
   try {
     console.info("[DB-INIT] Connecting to DataBase");
-    const connection = await connect(process.env.db_dev);
+    const connection = await connect(env.getMongoUri());
     const then = Date.now();
     console.info(`[DB-INIT] Successfully connected to ${connection.connections[0].name} after ${then - now}ms`);
 
@@ -97,7 +96,7 @@ console.info(chalk.bold.white("-".repeat(115)));
     console.error(chalk.red(error.stack));
   }
 
-  client.login(activeToken);
+  client.login(env.getToken());
 })();
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,8 +122,6 @@ client.on("interactionCreate", async (interaction) => {
   // SLASH COMMAND INTERACTION
   if (interaction.isCommand()) {
     if (!client.commands.has(interaction.commandName)) return;
-
-    // TODO: Only let /verify run in #verify and no other command
 
     // Command cooldown
     if (onCooldown.has(interaction.user.id)) {
