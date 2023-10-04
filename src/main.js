@@ -119,6 +119,11 @@ client.once("ready", () => {
 
 const onCooldown = new Set();
 client.on("interactionCreate", async (interaction) => {
+  // Feature Blacklist
+  if (client.blacklist.has(interaction.user.id)) {
+    return interaction.reply({ embeds: [warning("You cannot use my features since you are blacklisted")], ephemeral: true });
+  }
+
   // SLASH COMMAND INTERACTION
   if (interaction.isCommand()) {
     if (!client.commands.has(interaction.commandName)) return;
@@ -131,11 +136,6 @@ client.on("interactionCreate", async (interaction) => {
       setTimeout(() => {
         onCooldown.delete(interaction.user.id);
       }, settings.commandCooldown);
-    }
-
-    // Command Blacklist
-    if (client.blacklist.has(interaction.user.id)) {
-      return interaction.reply({ embeds: [warning("You cannot use my commands since you are blacklisted")], ephemeral: true });
     }
 
     try {

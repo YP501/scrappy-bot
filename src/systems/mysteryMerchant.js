@@ -40,7 +40,7 @@ export async function initMysteryMerchant(client) {
   async function leaveManager() {
     const leaveEmbed = new EmbedBuilder()
       .setTitle("Mystery Merchant Information")
-      .setDescription("To get notified on updates, check <#907253130973024256>")
+      .setDescription("To get notified on updates, check <#1158770462801809563>")
       .setThumbnail("https://cdn.discordapp.com/attachments/761949188501798962/1146110108787552256/Mystery_Merchant.webp")
       .addFields(
         { name: "Currently in-game?", value: "`No`", inline: true },
