@@ -1,6 +1,12 @@
-import { ActionRowBuilder, ButtonBuilder } from "discord.js";
+// eslint-disable-next-line no-unused-vars
+import { ActionRowBuilder, ButtonBuilder, Message } from "discord.js";
 
-export function disableButtons(row) {
+/**
+ *
+ * @param {Message} msg
+ */
+export function disableButtons(msg) {
+  const row = msg.components[0];
   const buttons = [];
   const buttonsJson = row.components;
   buttonsJson.forEach((button) => buttons.push(ButtonBuilder.from(button).setDisabled(true)));
