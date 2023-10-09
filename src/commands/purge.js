@@ -11,21 +11,21 @@ const data = new SlashCommandBuilder()
     cmd
       .setName("any")
       .setDescription("Bulkdelete a certain amount of message of all types")
-      .addIntegerOption((option) => option.setName("amount").setDescription("The amount of messages to delete").setRequired(true))
+      .addIntegerOption((option) => option.setName("amount").setDescription("The amount of messages to delete").setMinValue(1).setMaxValue(100).setRequired(true))
   )
   .addSubcommand((cmd) =>
     cmd
       .setName("before")
       .setDescription("Bulkdelete a certain amount of messages sent before a specific message")
       .addStringOption((option) => option.setName("message_id").setDescription("The ID of the message to take into consideration").setRequired(true))
-      .addIntegerOption((option) => option.setName("amount").setDescription("The amount of messages to delete").setRequired(true))
+      .addIntegerOption((option) => option.setName("amount").setDescription("The amount of messages to delete").setMinValue(1).setMaxValue(100).setRequired(true))
   )
   .addSubcommand((cmd) =>
     cmd
       .setName("after")
       .setDescription("Bulkdelete a certain amount of messages sent after a specific message")
       .addStringOption((option) => option.setName("message_id").setDescription("The ID of the message to take into consideration").setRequired(true))
-      .addIntegerOption((option) => option.setName("amount").setDescription("The amount of messages to delete").setRequired(true))
+      .addIntegerOption((option) => option.setName("amount").setDescription("The amount of messages to delete").setMinValue(1).setMaxValue(100).setRequired(true))
   );
 
 /**
@@ -40,15 +40,9 @@ async function execute(interaction) {
     return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
   }
 
-  const amount = interaction.options.getInteger("amount");
-  if (amount > 100) {
-    return interaction.editReply({ embeds: [error("You can't delete more than 100 messages at a time")] });
-  }
-  if (amount === 0) {
-    return interaction.editReply({ embeds: [error("You can't delete 0 messages you ding dong")] });
-  }
-
   await interaction.editReply({ embeds: [warning("Deleting messages...")] });
+
+  const amount = interaction.options.getInteger("amount");
   const message_id = interaction.options.getString("message_id");
   let fetchOptions = null;
 
@@ -82,12 +76,13 @@ async function execute(interaction) {
     .setTitle("New Purge")
     .setFields(
       { name: "Channel", value: `<#${interaction.channel.id}>`, inline: true },
-      { name: "Ran by", value: `<@${interaction.user.id}>`, inline: true },
+      { name: "Actor", value: `<@${interaction.user.id}>`, inline: true },
+      { name: "\u200b", value: "\u200b", inline: true },
       { name: "Filter", value: `\`${subCommand}\``, inline: true },
       { name: "Amount", value: `\`${messages.size}\``, inline: true },
-      { name: "Time", value: `<t:${Math.floor(interaction.createdTimestamp / 1000)}:R>`, inline: true }
+      { name: "\u200b", value: "\u200b", inline: true }
     )
-    .setFooter({ text: `User ID: ${interaction.user.id}` })
+    .setTimestamp()
     .setColor("Purple");
   interaction.guild.channels.cache.get(settings.channels.logging.purge).send({ embeds: [embed] });
 }

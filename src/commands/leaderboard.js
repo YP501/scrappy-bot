@@ -7,7 +7,7 @@ const name = "leaderboard";
 const data = new SlashCommandBuilder()
   .setName(name)
   .setDescription("List out all members based on their XP in chunks of 10")
-  .addIntegerOption((option) => option.setName("page").setDescription("The page to list, defaults to 1 if invalid"));
+  .addIntegerOption((option) => option.setName("page").setDescription("The page to list, defaults to 1 if invalid").setMinValue(1));
 
 /**
  * @param {CommandInteraction} interaction
@@ -17,7 +17,7 @@ async function execute(interaction) {
 
   // Getting values
   let page = interaction.options.getInteger("page");
-  if (page === null || page <= 0) {
+  if (page === null) {
     page = 1;
   }
   const skipAmount = (page - 1) * 10;
