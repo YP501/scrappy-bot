@@ -1,7 +1,12 @@
-import { EmbedBuilder, codeBlock, ButtonBuilder, ActionRowBuilder } from "discord.js";
+// eslint-disable-next-line no-unused-vars
+import { EmbedBuilder, codeBlock, ButtonBuilder, ActionRowBuilder, Message } from "discord.js";
 import { formatUrlMatch, getHostnameFromUrl } from "../functions/misc.js";
 import { settings } from "../config.js";
 
+/**
+ * Perform a URL check on the provided message and delete the message if an un-whitelisted URL is detected
+ * @param {Message} msg
+ */
 export async function filterUrl(msg) {
   if (msg.author.bot) return;
   if (msg.member.roles.cache.has(settings.roles.systems.filterBypass)) return;
