@@ -38,9 +38,9 @@ async function execute(interaction) {
   await interaction.deferReply();
 
   // Permission check
-  const roleID = settings.roles.permissions.ban;
-  if (!interaction.member.roles.cache.has(roleID)) {
-    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  const role = interaction.guild.roles.cache.get(settings.roles.permissions.ban);
+  if (interaction.member.roles.highest.position < role.position) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${role.id}> role or higher can use that!`)] });
   }
 
   // Getting option variables

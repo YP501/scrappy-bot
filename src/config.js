@@ -50,7 +50,7 @@ export const settings = {
     systems: {
       mysteryMerchant: "934508100025737246",
       verify: "1001595866295058573",
-      levels: "1157035021065007195",
+      levelUp: "1157035021065007195",
       welcome: "934790256190947368",
     },
   },
@@ -70,7 +70,7 @@ export const settings = {
       onVerification: ["1153341921171886200", "1029735346663071774", "934797707904692225", "934797713952878673"], // All the roles to add when someone has verified successfully
       mysteryMerchant: "954034783766327307",
       filterBypass: "954034783766327307",
-      levels: {
+      levelRoles: {
         // You can add as many as you'd like, they just need to follow the format "level<number>: role_id<string>"
         5: "968222586871898162",
         10: "968222643385958440",

@@ -35,9 +35,9 @@ async function execute(interaction) {
   await interaction.deferReply({ ephemeral: true });
 
   // Permission check
-  const roleID = settings.roles.permissions.purge;
-  if (!interaction.member.roles.cache.has(roleID)) {
-    return interaction.editReply({ embeds: [error(`Only members with the <@&${roleID}> role or higher can use that!`)] });
+  const role = interaction.guild.roles.cache.get(settings.roles.permissions.purge);
+  if (interaction.member.roles.highest.position < role.position) {
+    return interaction.editReply({ embeds: [error(`Only members with the <@&${role.id}> role or higher can use that!`)] });
   }
 
   await interaction.editReply({ embeds: [warning("Deleting messages...")] });

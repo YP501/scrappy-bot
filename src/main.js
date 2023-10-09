@@ -271,10 +271,10 @@ client.on("levelUp", async (levelEvent) => {
   const { newLevel, member: levelMember } = levelEvent;
   const { UserID, GuildID } = levelMember;
 
-  client.guilds.cache.get(GuildID).channels.cache.get(settings.channels.systems.levels).send(`🎉 <@${UserID}> leveled up to level ${newLevel}! 🎉`);
+  client.guilds.cache.get(GuildID).channels.cache.get(settings.channels.systems.levelUp).send(`🎉 <@${UserID}> leveled up to level ${newLevel}! 🎉`);
 
   // Add level roles on level up
-  const levelRolePairs = Object.entries(settings.roles.systems.levels);
+  const levelRolePairs = Object.entries(settings.roles.systems.levelRoles);
   for (const levelRolePair of levelRolePairs) {
     const levelValue = levelRolePair[0];
     const roleID = levelRolePair[1];
@@ -289,7 +289,7 @@ client.on("levelDown", async (levelEvent) => {
   const { UserID, GuildID } = levelMember;
 
   // Remove level roles on level down
-  const levelRolePairs = Object.entries(settings.roles.systems.levels);
+  const levelRolePairs = Object.entries(settings.roles.systems.levelRoles);
   for (const levelRolePair of levelRolePairs) {
     const levelValue = levelRolePair[0];
     const roleID = levelRolePair[1];
