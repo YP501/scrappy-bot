@@ -1,5 +1,5 @@
 // Imports
-import { Client, Collection, GatewayIntentBits, Routes, ActivityType } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Routes, ActivityType, EmbedBuilder } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { connect } from "mongoose";
 import chalk from "chalk";
@@ -160,9 +160,9 @@ client.on("interactionCreate", async (interaction) => {
   }
   // BUTTON INTERACTION
   else if (interaction.isButton()) {
-    const button = client.buttons.get(interaction.customId);
-    if (!button) return;
     try {
+      const button = client.buttons.get(interaction.customId);
+      if (!button) return;
       button.execute(interaction);
     } catch (error) {
       console.error(`${chalk.bold.rgb(0, 255, 0).underline(`Command: ${interaction.commandName} @ ${new Date().toString()}`)}`);
@@ -182,9 +182,82 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-client.on("messageCreate", (msg) => {
+client.on("messageCreate", async (msg) => {
   filterUrl(msg);
   handleChatXp(msg);
+});
+
+client.on("messageUpdate", async (oldMsg, newMsg) => {
+  if (oldMsg.author.id === bot.application_id) return; // Prevent the bot from calling this event on itself
+  filterUrl(newMsg);
+
+  const embed = new EmbedBuilder()
+    .setTitle("Message Edited")
+    .setDescription(`**Before:**\n${oldMsg.content}\n\n**After:**\n${newMsg.content}`)
+    .setFields(
+      { name: "Channel", value: `<#${oldMsg.channel.id}>`, inline: true },
+      { name: "Message ID", value: `[${oldMsg.id}](${oldMsg.url})`, inline: true },
+      { name: "\u200b", value: "\u200b", inline: true },
+      { name: "Author", value: `<@${oldMsg.author.id}>`, inline: true },
+      { name: "Created", value: `<t:${Math.floor(oldMsg.createdTimestamp / 1000)}:R>`, inline: true },
+      { name: "\u200b", value: "\u200b", inline: true }
+    )
+    .setColor("Orange")
+    .setTimestamp();
+  client.channels.cache.get(settings.channels.logging.events.messageUpdate).send({ embeds: [embed] });
+});
+
+client.on("messageDelete", (msg) => {
+  const attachment = msg.attachments.first();
+  const url = attachment ? attachment.url : null;
+  const embed = new EmbedBuilder()
+    .setTitle("Message Deleted")
+    .setDescription(msg.content)
+    .setFields(
+      { name: "Channel", value: `<#${msg.channel.id}>`, inline: true },
+      { name: "Message ID", value: `[${msg.id}](${msg.url})`, inline: true },
+      { name: "\u200b", value: "\u200b", inline: true },
+      { name: "Author", value: `<@${msg.author.id}>`, inline: true },
+      { name: "Created", value: `<t:${Math.floor(msg.createdTimestamp / 1000)}:R>`, inline: true },
+      { name: "\u200b", value: "\u200b", inline: true }
+    )
+    .setColor("Red")
+    .setImage(url)
+    .setTimestamp();
+
+  client.channels.cache.get(settings.channels.logging.events.messageDelete).send({ embeds: [embed] });
+});
+
+client.on("guildMemberAdd", (member) => {
+  const userEmbed = new EmbedBuilder()
+    .setTitle(`Welcome to ${member.guild.name}!`)
+    .setThumbnail(member.user.displayAvatarURL())
+    .setDescription(`We are happy to have you here, ${member.user.displayName}! 🎉\nYou are our ${member.guild.memberCount}th member`)
+    .setColor("Purple")
+    .setTimestamp();
+
+  const logEmbed = new EmbedBuilder()
+    .setTitle("User Joined")
+    .setThumbnail(member.user.displayAvatarURL())
+    .setDescription(
+      `>>> **User:** <@${member.user.id}>\n**Created:** <t:${Math.floor(member.user.createdTimestamp / 1000)}:R>\n**Members:** ${member.guild.memberCount}`
+    )
+    .setColor("Orange")
+    .setTimestamp();
+
+  client.channels.cache.get(settings.channels.systems.welcome).send({ embeds: [userEmbed], content: `<@${member.user.id}>` });
+  client.channels.cache.get(settings.channels.logging.events.guildMemberAdd).send({ embeds: [logEmbed] });
+});
+
+client.on("guildMemberRemove", (member) => {
+  const embed = new EmbedBuilder()
+    .setTitle("User Left")
+    .setThumbnail(member.user.displayAvatarURL())
+    .setDescription(`>>> **User:** <@${member.user.id}>\n**Joined:** <t:${Math.floor(member.joinedTimestamp / 1000)}:R>\n**Members:** ${member.guild.memberCount}`)
+    .setColor("Red")
+    .setTimestamp();
+
+  client.channels.cache.get(settings.channels.logging.events.guildMemberRemove).send({ embeds: [embed] });
 });
 
 client.on("levelUp", async (levelEvent) => {

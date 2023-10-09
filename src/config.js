@@ -23,6 +23,7 @@ export const settings = {
   min_Xp: 15,
   max_Xp: 30,
   xpCooldown: 30 * 1000,
+  verifyTime: 2 * 60 * 1000,
   emojis: {
     check: "<:scrappy_check:1029855559761002506>",
     cross: "<:scrappy_cross:1029847563437887620>",
@@ -37,12 +38,20 @@ export const settings = {
       lock: "1158111972139745412", // same for unlock
       purge: "928380278274138212",
       timeout: "1011022661926785125",
+      verify: "933770206008991805",
       warn: "1012018634291433582",
+      events: {
+        messageUpdate: "933770206008991805",
+        messageDelete: "933770206008991805",
+        guildMemberAdd: "933770206008991805",
+        guildMemberRemove: "933770206008991805",
+      },
     },
     systems: {
       mysteryMerchant: "934508100025737246",
       verify: "1001595866295058573",
       levels: "1157035021065007195",
+      welcome: "934790256190947368",
     },
   },
   roles: {
@@ -58,7 +67,7 @@ export const settings = {
       warn: "954034783766327307",
     },
     systems: {
-      verified: "1153341921171886200",
+      onVerification: ["1153341921171886200", "1029735346663071774", "934797707904692225", "934797713952878673"], // All the roles to add when someone has verified successfully
       mysteryMerchant: "954034783766327307",
       filterBypass: "954034783766327307",
       levels: {
