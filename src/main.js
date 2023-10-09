@@ -191,6 +191,8 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
   if (oldMsg.author.id === bot.application_id) return; // Prevent the bot from calling this event on itself
   filterUrl(newMsg);
 
+  if (!oldMsg.content) return; // To prevent dumb shenanigans like the bot updating its embeds
+
   const embed = new EmbedBuilder()
     .setTitle("Message Edited")
     .setDescription(`**Before:**\n${oldMsg.content}\n\n**After:**\n${newMsg.content}`)
@@ -208,11 +210,16 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 });
 
 client.on("messageDelete", (msg) => {
+  if (msg.author.id === bot.application_id) return; // Prevent the bot from calling this event on itself
+
+  const content = msg.content || null;
   const attachment = msg.attachments.first();
   const url = attachment ? attachment.url : null;
+  if (!url && !content) return; // Prevent sending if embed only message is deleted as we don't want to log those
+
   const embed = new EmbedBuilder()
     .setTitle("Message Deleted")
-    .setDescription(msg.content)
+    .setDescription(content)
     .setFields(
       { name: "Channel", value: `<#${msg.channel.id}>`, inline: true },
       { name: "Message ID", value: `[${msg.id}](${msg.url})`, inline: true },
