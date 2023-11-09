@@ -9,7 +9,7 @@ export async function loadUnbans(client) {
   const currentBans = await Ban.find();
 
   for (const ban of currentBans) {
-    if (ban.unbanTimestamp - Date.now() <= 0) {
+    if (ban.unbanTimestamp !== null && ban.unbanTimestamp - Date.now() <= 0) {
       guild.bans.remove(ban.targetUser_id).catch(() => {});
       logChannel.send({ embeds: [warning(`<@${ban.targetUser_id}> has been unbanned by bot startup unban checker`)] });
       await Ban.deleteOne({ targetUser_id: ban.targetUser_id });
