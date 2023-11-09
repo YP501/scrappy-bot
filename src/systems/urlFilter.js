@@ -18,6 +18,7 @@ export async function filterUrl(msg) {
   if (regexResult) {
     // Check if detected domain is whitelisted
     const url = getHostnameFromUrl(regexResult[0]);
+    if (url.includes("...")) return; // Prevents ... from being tagged; bro...
     const isWhitelisted = msg.client.whitelistedUrls.has(url);
     if (isWhitelisted) return;
 

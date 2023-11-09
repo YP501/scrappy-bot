@@ -39,9 +39,10 @@ async function execute(interaction) {
       const button = new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId("verify").setLabel("Verify").setStyle(ButtonStyle.Success));
 
       interaction.channel.send({ embeds: [embed], components: [button] });
+      break;
     }
   }
-  await interaction.editReply({ embeds: [success("Successfully sent embed")] });
+  interaction.editReply({ embeds: [success("Successfully sent embed")] });
 }
 
 export { name, data, execute };

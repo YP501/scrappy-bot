@@ -12,7 +12,6 @@ import {
   TextInputBuilder,
 } from "discord.js";
 import { CaptchaGenerator } from "captcha-canvas";
-import { disableButtons } from "../functions/components.js";
 import { warning, success, error } from "../structures/embeds.js";
 import { settings } from "../config.js";
 
@@ -167,7 +166,7 @@ async function execute(interaction) {
   buttonCollector.on("end", async () => {
     msg.edit({
       embeds: [embed.setTitle("Inactive Verification Session").setColor("Red").setFooter({ text: "Session time left: None" }).setImage(null)],
-      components: [disableButtons(msg)],
+      components: [],
       files: [],
     });
     inSession.delete(user.id);
