@@ -20,16 +20,16 @@
     "canvacord": "^5.4.10",
     "captcha-canvas": "^3.2.1",
     "chalk": "^5.3.0",
-    "cron": "^3.0.0",
-    "discord-rankup": "^1.1.1",
+    "cron": "^3.1.1",
+    "discord-rankup": "^1.1.2",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
-    "mongoose": "^7.3.1",
+    "mongoose": "^8.0.0",
     "ms": "^2.1.3",
     "skia-canvas": "^1.0.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.44.0"
+    "eslint": "^8.51.0"
   }
 }
