@@ -21,8 +21,7 @@ const data = new SlashCommandBuilder()
       .setName("remove")
       .setDescription("Remove a user from the blacklist")
       .addUserOption((option) => option.setName("target").setDescription("The user to remove from the blacklist").setRequired(true))
-  )
-  .addSubcommand((cmd) => cmd.setName("refresh").setDescription("Re-sync the local blacklist with the database if it happens de-sync"));
+  );
 
 /**
  * @param {CommandInteraction} interaction
@@ -99,20 +98,6 @@ async function execute(interaction) {
       if (deletedCount === 0) {
         interaction.followUp({ embeds: [warning("No Database entry deleted. Please run `/blacklist refresh`")], ephemeral: true });
       }
-      break;
-    }
-    case "refresh": {
-      // Clearing local blacklist
-      interaction.client.blacklist.clear();
-
-      // Fetching blacklist from the database and setting it to the local one
-      const queryResult = await Blacklist.find();
-      queryResult.forEach((entry) => {
-        interaction.client.blacklist.add(entry.targetUser_id);
-      });
-
-      // Sending
-      interaction.editReply({ embeds: [success("Successfully refreshed local blacklist")] });
       break;
     }
   }
