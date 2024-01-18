@@ -189,6 +189,7 @@ client.on("messageCreate", async (msg) => {
 
 client.on("messageUpdate", async (oldMsg, newMsg) => {
   if (oldMsg.author.id === bot.application_id) return; // Prevent the bot from calling this event on itself
+  if (oldMsg.content === newMsg.content) return; //Don't do anything if the message body isn't edited
   filterUrl(newMsg);
 
   if (!oldMsg.content) return; // To prevent dumb shenanigans like the bot updating its embeds
@@ -214,7 +215,7 @@ client.on("messageDelete", (msg) => {
 
   const content = msg.content || null;
   const attachment = msg.attachments.first();
-  const url = attachment ? attachment.url : null;
+  const url = attachment ? attachment.proxyURL : null;
   if (!url && !content) return; // Prevent sending if embed only message is deleted as we don't want to log those
 
   const embed = new EmbedBuilder()
