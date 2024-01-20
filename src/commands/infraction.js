@@ -118,7 +118,7 @@ async function execute(interaction) {
           embed.addFields({
             name: `Entry ${entryNum}`,
             value: `
-            ${entry.reason}
+            >>> ${entry.reason}
             Type: \`${entry.type}\`
             ID: \`${entry.id}\`
           `,
