@@ -255,6 +255,9 @@ client.on("guildMemberAdd", (member) => {
 
   client.channels.cache.get(settings.channels.systems.welcome).send({ embeds: [userEmbed], content: `<@${member.user.id}>` });
   client.channels.cache.get(settings.channels.logging.events.guildMemberAdd).send({ embeds: [logEmbed] });
+
+  // Add roles manually, no verification
+  member.roles.add(settings.roles.systems.onVerification);
 });
 
 client.on("guildMemberRemove", (member) => {
