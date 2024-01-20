@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -14,7 +15,7 @@ export const env = {
 export const bot = {
   guild_id: "928369763552464997",
   application_id: "889157854966198313",
-  version: "v4.0.0",
+  version: JSON.parse(readFileSync("./package.json")).version,
 };
 
 export const settings = {
@@ -62,6 +63,7 @@ export const settings = {
       kick: "954034783766327307",
       levels: "954034783766327307",
       lock: "954034783766327307", // same for unlock
+      mod_actions: "954034783766327307",
       purge: "954034783766327307",
       resync: "954034783766327307",
       timeout: "954034783766327307",
