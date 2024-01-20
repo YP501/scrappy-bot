@@ -1,6 +1,6 @@
 {
   "name": "scrappy-bot",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Custom bot for FrankieFms's server",
   "main": "./src/main.js",
   "scripts": {
