@@ -1,13 +1,11 @@
 // eslint-disable-next-line no-unused-vars
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js";
+import { SlashCommandBuilder, CommandInteraction, AttachmentBuilder } from "discord.js";
 import { DiscordRankup } from "discord-rankup";
-import { error } from "../structures/embeds.js";
+import { warning } from "../structures/embeds.js";
+import { Font, LeaderboardBuilder } from "canvacord";
 
 const name = "leaderboard";
-const data = new SlashCommandBuilder()
-  .setName(name)
-  .setDescription("List out all members based on their XP in chunks of 10")
-  .addIntegerOption((option) => option.setName("page").setDescription("The page to list, defaults to 1 if invalid").setMinValue(1));
+const data = new SlashCommandBuilder().setName(name).setDescription("List the top 10 members with the highest level and XP");
 
 /**
  * @param {CommandInteraction} interaction
@@ -15,32 +13,38 @@ const data = new SlashCommandBuilder()
 async function execute(interaction) {
   await interaction.deferReply();
 
-  // Getting values
-  let page = interaction.options.getInteger("page");
-  if (page === null) {
-    page = 1;
+  const leaderboardXPMembers = await DiscordRankup.fetchLeaderboard(interaction.guild.id, { limit: 10, skip: 0 });
+  if (leaderboardXPMembers.length === 0) return interaction.editReply({ embeds: [warning("Something went wrong with getting the leaderboard. Please try again")] });
+
+  const fetchedMembers = await interaction.guild.members.fetch({ user: leaderboardXPMembers.map((XPMember) => XPMember.UserID), withPresences: false });
+
+  const leaderboardEntries = [];
+  let rankNum = 1;
+
+  for (const member of fetchedMembers) {
+    const user = member[1].user;
+    const avatar = user.displayAvatarURL({ extension: "png", forceStatic: true });
+    const username = user.tag;
+    const displayName = user.displayName;
+    const level = leaderboardXPMembers[rankNum - 1].Level;
+    const xp = leaderboardXPMembers[rankNum - 1].XP;
+    const rank = rankNum;
+
+    leaderboardEntries.push({ avatar, username, displayName, level, xp, rank });
+    rankNum++;
   }
-  const skipAmount = (page - 1) * 10;
 
-  const leaderboardXPMembers = await DiscordRankup.fetchLeaderboard(interaction.guild.id, { limit: 10, skip: skipAmount });
-  if (leaderboardXPMembers.length === 0) {
-    return interaction.editReply({ embeds: [error(`No entries found for page \`${page}\`, try a lower number`)] });
-  }
+  Font.loadDefault();
+  const leaderboard = new LeaderboardBuilder()
+    .setHeader({
+      title: interaction.guild.name,
+      image: interaction.guild.iconURL(),
+      subtitle: `${interaction.guild.memberCount} members`,
+    })
+    .setPlayers(leaderboardEntries);
+  const leaderboardBuffer = await leaderboard.build({ format: "png" });
 
-  // Creating the embed "value" strings by using mapping magic
-  const memberField = leaderboardXPMembers.map((XPMember, idx) => `${skipAmount + idx + 1} - <@${XPMember.UserID}>\n`).join("");
-  const levelField = leaderboardXPMembers.map((XPMember) => `${XPMember.Level}\n`).join("");
-  const xpField = leaderboardXPMembers.map((XPMember) => `${XPMember.XP}\n`).join("");
-
-  // Slapping together the final embed
-  const embed = new EmbedBuilder()
-    .setTitle(`${interaction.guild.name} Level Leaderboard`)
-    .setDescription(`Showing Top ${skipAmount + 1} - ${skipAmount + 10} Members | Page ${page}`)
-    .setThumbnail("https://static-00.iconduck.com/assets.00/trophy-emoji-2048x2045-cd051k82.png")
-    .setFields({ name: "Member", value: memberField, inline: true }, { name: "Level", value: levelField, inline: true }, { name: "XP", value: xpField, inline: true })
-    .setColor("Purple")
-    .setFooter({ text: `User ID: ${interaction.user.id}` });
-  interaction.editReply({ embeds: [embed] });
+  interaction.editReply({ files: [new AttachmentBuilder(leaderboardBuffer, "leaderboard.png")] });
 }
 
 export { name, data, execute };
