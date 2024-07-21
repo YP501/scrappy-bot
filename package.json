@@ -1,11 +1,10 @@
 {
   "name": "scrappy-bot",
-  "version": "4.0.3",
+  "version": "4.0.5",
   "description": "Custom bot for FrankieFms's server",
   "main": "./src/main.js",
   "scripts": {
-    "start": "node ./src/main.js",
-    "update": "node ./src/scripts/updateCommands.js"
+    "start": "bun ./src/main.js"
   },
   "repository": {
     "type": "git",

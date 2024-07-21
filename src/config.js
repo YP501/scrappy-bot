@@ -12,6 +12,14 @@ export const env = {
   },
 };
 
+// !!! YOU MUST EDIT AT LEAST THE FOLLOWING THINGS IN THIS FILE !!!
+// guild_id
+// application_id
+// emojis
+// channels
+// roles
+// appealServerInvite
+
 export const bot = {
   guild_id: "928369763552464997",
   application_id: "889157854966198313",
@@ -74,7 +82,7 @@ export const settings = {
       mysteryMerchant: "954034783766327307",
       filterBypass: "954034783766327307",
       levelRoles: {
-        // You can add as many as you'd like, they just need to follow the format "level<number>: role_id<string>"
+        // You can add as many as you'd like, they just need to follow the format "<level_number>: <role_id>"
         5: "968222586871898162",
         10: "968222643385958440",
         15: "968223193347289140",

@@ -26,6 +26,7 @@ console.info(chalk.bold.white("-".repeat(115)));
 
 (async () => {
   // Command loading
+  const slashCommands = [];
   const commandFiles = fs.readdirSync("./src/commands").filter((file) => file.endsWith(".js"));
   console.info(`[FILE-LOAD] Loading files, expecting ${commandFiles.length} files`);
 
@@ -34,6 +35,7 @@ console.info(chalk.bold.white("-".repeat(115)));
       console.info(`[FILE-LOAD] Loading file: ${file}`);
       const command = await import(`./commands/${file}`);
       if (command.name) {
+        slashCommands.push(command.data.toJSON());
         client.commands.set(command.name, command);
         console.info(`[FILE-LOAD] Loaded file: ${file}`);
       }
@@ -41,6 +43,20 @@ console.info(chalk.bold.white("-".repeat(115)));
       console.error(chalk.bold.rgb(0, 255, 0).underline(`[FILE-LOAD] Unloaded: ${file}`));
       console.error(chalk.red(error.stack));
     }
+  }
+
+  console.info(`[FILE-LOAD] ${slashCommands.length} files are loaded and ready to be sent`);
+  let now = Date.now();
+
+  try {
+    console.info("[APP-REFR] Started refreshing application (/) commands");
+    await rest.put(Routes.applicationGuildCommands(bot.application_id, bot.guild_id), { body: slashCommands });
+    const then = Date.now();
+    console.info(`[APP-REFR] Successfully reloaded application (/) commands after ${then - now}ms`);
+  } catch (error) {
+    const then = Date.now();
+    console.error(chalk.bold.rgb(0, 255, 0).underline(`[APP-REFR] Failed to reload application (/) commands after ${then - now}ms`));
+    console.error(chalk.red(error.stack));
   }
 
   // Button loading
@@ -54,7 +70,7 @@ console.info(chalk.bold.white("-".repeat(115)));
   console.info("[BTN-INIT] Finished setting buttons");
 
   // Database init
-  let now = Date.now();
+  now = Date.now();
   try {
     console.info("[DB-INIT] Connecting to DataBase");
     const connection = await connect(env.getMongoUri());

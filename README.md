@@ -17,12 +17,12 @@ This repository is made open source for the purpose of transparency and for peop
 4. Add an `.env` file in the root folder with the following values:
 
 ```
-tokenDev = "your bot token here"
-dbAuthDev = "your mongo authentication uri here"
+token_dev = "your bot token here"
+db_dev = "your mongo authentication uri here"
 ```
 
 4. Tweak the id's and values in `./src/config.js` to match the ones of your server and preferences
-5. Run `node .` or `bun .`, whichever runtime you prefer
+5. Run `bun start`
 6. Pray it works
 
 ## Notes
