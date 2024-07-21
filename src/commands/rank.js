@@ -28,7 +28,7 @@ async function execute(interaction) {
   const rankCard = new RankCardBuilder()
     .setDisplayName(user.displayName)
     .setUsername(`@${user.tag}`)
-    .setAvatar(user.displayAvatarURL({ dynamic: false }))
+    .setAvatar(user.displayAvatarURL({ forceStatic: true }))
     .setCurrentXP(cardData.currentXP)
     .setRequiredXP(DiscordRankup.requiredXP(cardData.level + 1))
     .setLevel(cardData.level)

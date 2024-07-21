@@ -13,25 +13,21 @@ const data = new SlashCommandBuilder().setName(name).setDescription("List the to
 async function execute(interaction) {
   await interaction.deferReply();
 
-  const leaderboardXPMembers = await DiscordRankup.fetchLeaderboard(interaction.guild.id, { limit: 10, skip: 0 });
+  const leaderboardXPMembers = await DiscordRankup.fetchLeaderboard(interaction.guild.id, { limit: 3, skip: 0 });
   if (leaderboardXPMembers.length === 0) return interaction.editReply({ embeds: [warning("Something went wrong with getting the leaderboard. Please try again")] });
 
-  const fetchedMembers = await interaction.guild.members.fetch({ user: leaderboardXPMembers.map((XPMember) => XPMember.UserID), withPresences: false });
-
   const leaderboardEntries = [];
-  let rankNum = 1;
 
-  for (const member of fetchedMembers) {
-    const user = member[1].user;
-    const avatar = user.displayAvatarURL({ extension: "png", forceStatic: true });
+  for (let i = 0; i < leaderboardXPMembers.length; i++) {
+    const user = await interaction.client.users.fetch(leaderboardXPMembers[i].UserID);
+    const avatar = user.displayAvatarURL({ forceStatic: true });
     const username = user.tag;
     const displayName = user.displayName;
-    const level = leaderboardXPMembers[rankNum - 1].Level;
-    const xp = leaderboardXPMembers[rankNum - 1].XP;
-    const rank = rankNum;
+    const level = leaderboardXPMembers[i].Level;
+    const xp = leaderboardXPMembers[i].XP;
+    const rank = i + 1;
 
     leaderboardEntries.push({ avatar, username, displayName, level, xp, rank });
-    rankNum++;
   }
 
   Font.loadDefault();
@@ -42,7 +38,7 @@ async function execute(interaction) {
       subtitle: `${interaction.guild.memberCount} members`,
     })
     .setPlayers(leaderboardEntries);
-  const leaderboardBuffer = await leaderboard.build({ format: "png" });
+  const leaderboardBuffer = await leaderboard.build();
 
   interaction.editReply({ files: [new AttachmentBuilder(leaderboardBuffer, "leaderboard.png")] });
 }
