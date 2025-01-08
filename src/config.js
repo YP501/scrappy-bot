@@ -78,7 +78,7 @@ export const settings = {
       warn: "954034783766327307",
     },
     systems: {
-      onVerification: ["1153341921171886200", "1029735346663071774", "934797707904692225", "934797713952878673"], // All the roles to add when someone has verified successfully
+      onVerification: ['1158511538592817202', '1160957571654488185', '966008688517210214', '1158748075251216455', '1302639777463533650'], // VERIFICATION ROLE, COULD BE USED LATER '1158525534578421831' // The roles to add when someone has verified successfully
       mysteryMerchant: "954034783766327307",
       filterBypass: "954034783766327307",
       levelRoles: {
