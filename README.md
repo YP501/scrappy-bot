@@ -6,14 +6,14 @@ This repository is made open source for the purpose of transparency and for peop
 
 ## Self-hosting
 
-> Self-hosting is allowed, although it's not recommended since this bot is focused on the FrankieFms Lounge server and contains some hardcoded values and is therefor likely to not work on other servers.
+> Self-hosting is allowed, although it's not recommended because this bot is focused on the FrankieFms Lounge server and contains some hardcoded values. Therefore, it is likely to not work on other servers.
 > If any of the fields/ values are not filled in or wrong, the bot won't start.
 
-**Steps on self-hosting:**
+**Steps for self-hosting:**
 
 1. Download the source code from the [latest release](https://github.com/YP501/scrappy-bot/releases/latest) and unzip it somewhere
 2. Enter the folder you just unzipped
-3. Install the node modules with `bun install`
+3. Install the node modules with `bun install` (install bun [here](https://bun.com/docs/installation) if you haven't already)
 4. Add an `.env` file in the root folder with the following values:
 
 ```
