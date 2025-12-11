@@ -1,32 +1,42 @@
-# Welcome to scrappy-bot, FrankieFms' Discord bot!
+# ⚠️ This repository is archived
 
-> Developed and maintained by [@YP501](https://github.com/YP501)
+This version of **scrappy-bot** has been **archived** and is no longer maintained.   
+A complete rewrite of the bot is now available in C#:
 
-This repository is made open source for the purpose of transparency and for people who are interested in how this bot works behind the scenes.
+👉 **New repository:** *https://github.com/YP501/Scrappy.NET*
 
-## Self-hosting
+---
 
-> Self-hosting is allowed, although it's not recommended because this bot is focused on the FrankieFms Lounge server and contains some hardcoded values. Therefore, it is likely to not work on other servers.
-> If any of the fields/ values are not filled in or wrong, the bot won't start.
+# Welcome to scrappy-bot, FrankieFms' Discord bot! (Archived)
 
-**Steps for self-hosting:**
+> Developed and maintained by [@YP501](https://github.com/YP501)  
+> **This JavaScript/Bun version is archived and replaced by a new C# rewrite.**
 
-1. Download the source code from the [latest release](https://github.com/YP501/scrappy-bot/releases/latest) and unzip it somewhere
-2. Enter the folder you just unzipped
-3. Install the node modules with `bun install` (install bun [here](https://bun.com/docs/installation) if you haven't already)
-4. Add an `.env` file in the root folder with the following values:
+This repository is kept public for transparency and for people who are interested in how the original version worked behind the scenes.
 
-```
+## Self-hosting (Archive Version)
+
+> Self-hosting is allowed, although it is **not recommended** because this bot was focused on the FrankieFms Lounge server and contains several hardcoded values. Incorrect or missing configuration will prevent the bot from starting.
+
+### Steps for self-hosting (legacy version):
+
+1. Download the source code from the [latest release](https://github.com/YP501/scrappy-bot/releases/latest) and unzip it
+2. Enter the newly extracted folder
+3. Install dependencies with `bun install`  
+   Install Bun if needed: https://bun.com/docs/installation
+4. Add an `.env` file in the root folder with:
+```env
 token_dev = "your bot token here"
 db_dev = "your mongo authentication uri here"
 ```
-
-4. Tweak the id's and values in `./src/config.js` to match the ones of your server and preferences
-5. Run `bun start`
-6. Pray it works
+5. Edit the IDs and values inside `./src/config.js` to match your server
+6. Run `bun start`
+7. Hope for the best
 
 ## Notes
 
-- You are allowed to self-host this bot but you are not allowed to impersonate this bot as Frankie's bot.
-- You **MUST** credit the original author of this repository when self-hosting and **CANNOT** claim it as your own.
-- This bot was previously named Helikopter Bot and was renamed to Scrappy Bot.
+- You **may** self-host but **may not** impersonate Frankie's version of the bot.
+- You **must** credit the original author when self-hosting this version.
+- This bot was originally named **Helikopter Bot**, later renamed to **Scrappy Bot**.
+- This repository has been **archived** in favor of a new C# rewrite.
+- Limited help for this legacy version is available, but **no functionality is guaranteed** and issues may not be fixable due to its outdated architecture.
